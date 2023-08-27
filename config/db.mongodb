@@ -1,1 +1,379 @@
+/**
+ * *Usuario schema
+ */
 use("db_rappi");
+db.createCollection("usuario", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'apellido', 'email','departamento','ciudad','direccion','telefono'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de usuario es obligatorio',
+                },
+                apellido: {
+                    bsonType: 'string',
+                    description: 'El apellido es obligatorio',
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio'
+                },
+                departamento: {
+                    bsonType: 'string',
+                    description: 'El departamento es obligatorio'
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio'
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'El direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono debe ser numerico'
+                }
+            }
+        }
+    }
+});
+// inserta data
+
+use("db_rappi");
+db.usuario.insertMany([
+    {
+        id: 1,
+        nombre: 'Juan',
+        apellido:"Perez",
+        email: 'juan0@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 15",
+        telefono:31523456
+    },
+    {
+        id: 2,
+        nombre: 'Pablo',
+        apellido:"Rodriguez",
+        email: 'Pablo@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 3",
+        telefono:31102936
+    },
+]);
+
+/**
+ * *rappiTendero
+ */
+use("db_rappi");
+db.createCollection("rappiTendero", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'apellido', 'email','departamento','ciudad','direccion','telefono'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de usuario es obligatorio',
+                },
+                apellido: {
+                    bsonType: 'string',
+                    description: 'El apellido es obligatorio',
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio'
+                },
+                departamento: {
+                    bsonType: 'string',
+                    description: 'El departamento es obligatorio'
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio'
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'El direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono debe ser numerico'
+                }
+            }
+        }
+    }
+});
+// inserta data
+
+use("db_rappi");
+db.rappiTendero.insertMany([
+    {
+        id: 1,
+        nombre: 'Marco',
+        apellido:"Rodriguez",
+        email: 'Marco@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 12",
+        telefono:30012345
+    },
+    {
+        id: 2,
+        nombre: 'Jhon',
+        apellido:"Ferrer",
+        email: 'Jhon@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 10",
+        telefono:31023456
+    },
+]);
+
+
+/**
+ * *empresa schema
+ */
+use("db_rappi");
+db.createCollection("empresa", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'ciudad', 'direccion','telefono'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de empresa es obligatorio',
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio',
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'la direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono es obligatorio'
+                }
+            }
+        }
+    }
+});
+// inserta data
+
+use("db_rappi");
+db.empresa.insertMany([
+    {
+        id: 1,
+        nombre: 'Burguer SS',
+        ciudad:"Bucaramanga",
+        direccion: 'carrera 4',
+        telefono: 312009345,
+    },
+    {
+        id: 1,
+        nombre: 'Pizza zz',
+        ciudad:"Bucaramanga",
+        direccion: 'avenida 20 calle1',
+        telefono: 312349345,
+    }
+]);
+ /**
+  * *catalogo schema
+  */
+use("db_rappi");
+db.createCollection("catalogo", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'id_Empresa','tipoProducto', 'nombre', 'descripcion','precio'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id_Empresa:{
+                    bsonType: "int",
+                    description: 'La id de la empresa es obligatoria y debe ser numérica'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                tipoProducto: {
+                    bsonType: 'string',
+                    description: 'El tipo de producto es obligatorio',
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre es obligatorio',
+                },
+                descripcion: {
+                    bsonType: 'string',
+                    description: 'la descripcion es obligatorio'
+                },
+                precio: {
+                    bsonType: 'int',
+                    description: 'El precio es obligatorio'
+                }
+
+            }
+        }
+    }
+});
+// inserta data
+
+use("db_rappi");
+db.catalogo.insertMany([
+    {
+        id: 1,
+        id_Empresa:1,
+        tipoProducto: 'Hamburguesa',
+        nombre:"Burguer de casa ",
+        descripcion: 'hamburguesa doble carne y salsa de casa',
+        precio: 27000
+        
+    },
+    {
+        id: 2,
+        id_Empresa:2,
+        tipoProducto: 'pizza',
+        nombre: 'Pizza especial',
+        descripcion: 'pizza con camarones y queso',
+        precio: 8500
+    }
+]);
+
+/**
+ * pedido schema
+ */
+use("db_rappi");
+db.createCollection("pedido", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'id_Producto','id_cliente', 'id_rappiTendero','id_Empresa','cantidad', 'fecha','descuento','totalPago'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id:{
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                id_Producto:{
+                    bsonType: "int",
+                    description: 'La id del producto es obligatoria y debe ser numérica'
+                },
+                id_cliente: {
+                    bsonType: "int",
+                    description: 'La id de cliente es obligatoria y debe ser numérica'
+                },
+                id_rappiTendero:{
+                    bsonType: 'int',
+                    description: 'El id de rappiTendero debe ser obligatoria',
+                },
+                id_Empresa:{
+                    bsonType: 'int',
+                    description: 'El id debe ser obligatoria',
+                },
+                cantidad:{
+                    bsonType: 'int',
+                    description: 'El cantidad debe ser obligatoria',
+                },
+                fecha: {
+                    bsonType: 'date',
+                    description: 'El fecha debe ser obligatoria',
+                },
+               
+                descuento: {
+                    bsonType: 'int',
+                    description: 'el descuento debe ser numerico'
+                },
+                totalPago: {
+                    bsonType: 'int',
+                    description: 'El total a pagar es obligatorio'
+                }
+
+            }
+        }
+    }
+});
+// inserta data
+
+use("db_rappi");
+db.pedido.insertMany([
+    {
+        id: 1,
+        id_Producto:1,
+        id_cliente: 1,
+        id_rappiTendero:2,
+        id_Empresa:2,
+        cantidad:2,
+        fecha: ISODate('2022-06-02'),
+        descuento: 3000,
+        totalPago: 15000
+
+        
+    },
+    {
+        id: 2,
+        id_Producto:1,
+        id_cliente: 2,
+        id_rappiTendero:1,
+        id_Empresa:1,
+        cantidad:1,
+        fecha: ISODate('2022-06-02'),
+        descuento: 0,
+        totalPago: 27000
+
+        
+    },
+]);
+

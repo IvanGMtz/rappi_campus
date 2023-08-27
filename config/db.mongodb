@@ -349,7 +349,8 @@ db.createCollection("pedido", {
 
 use("db_rappi");
 db.pedido.insertMany([
-    {
+    { 
+        
         id: 1,
         id_Producto:1,
         id_cliente: 1,

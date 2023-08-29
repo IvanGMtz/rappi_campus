@@ -1,36 +1,27 @@
-import { con } from "../../../config/connection/atlas.js";
-import { siguienteId } from "../../helpers/counter.js";
+import {con} from "../../../config/connection/atlas.js";
 
 let db = await con();
-let collection = db.collection("catalogo");
+let collection = db.collection("empresa");
 
-export const getCatalogoV1 = async (req, res) => {
-    let result = await collection.find().toArray();
+export const getCatalogoV1 = async (req, res)=>{
+    let result = await collection.aggregate([
+        {
+            $lookup: {
+                from: "producto",
+                localField: "id",
+                foreignField: "id_Empresa",
+                as: "productos",
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                nombre: 1,
+                direccion: 1,
+                "productos.nombre": 1,
+                "productos.precio": 1,
+            },
+        },
+    ]).toArray();
     res.send(result);
-}
-
-export const postCatalogoV1 = async (req, res) => {
-    try {
-        let data = req.body
-        let newId = await siguienteId("catalogo")
-        let insert = await collection.insertOne(
-            {
-                id: newId,
-                id_Empresa: data.id_Empresa,
-                tipoProducto: data.tipoProducto,
-                nombre: data.nombre,
-                descripcion: data.descripcion,
-                precio: data.precio
-            }
-        )
-        if (insert.insertedId !== undefined) {
-            res.send({ status: 200, message: "entered the data correctly", insert });
-        }
-        else {
-            res.status(400).send({ message: "Error at entered the data" })
-        }
-    } catch (error) {
-        res.status(400).send({ error: error });
-
-    }
 }

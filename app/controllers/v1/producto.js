@@ -69,12 +69,7 @@ console.log(id);
             {
                 id: { $eq: req.body.id }
             }, {
-                $set:{ id: req.body.id,
-                    id_Empresa: Number(id),
-                    tipoProducto: req.body.tipoProducto,
-                    nombre: req.body.nombre,
-                    descripcion: req.body.descripcion,
-                    precio: req.body.precio}
+                $set:nuevoProducto
             }
             );
             console.log("aqui");

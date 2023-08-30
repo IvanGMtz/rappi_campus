@@ -6,7 +6,8 @@ db.counters.insertMany([
     { id: "empresaId", sequence_value: 0 },
     { id: "productoId", sequence_value: 0 },
     { id: "pedidoId", sequence_value: 0 },
-    { id: "rolId", sequence_value: 0 }
+    { id: "rolId", sequence_value: 0 },
+    { id: "facturaId", sequence_value: 0 }
 ]);
 
 function siguienteId(coleccion) {
@@ -32,7 +33,7 @@ db.rol.insertMany([
         permisos:{
             "/catalogo": ["1.0.0", "get"],
             "/pedido": ["1.0.0", "get", "post"],
-            "/producto": ["1.0.0", "get", "post"],
+            "/producto": ["1.0.0", "get", "post", "put", "delete"],
             "/empresa": ["1.0.0", "get", "put"]
         }
     },
@@ -42,7 +43,6 @@ db.rol.insertMany([
         permisos:{
             "/catalogo": ["1.0.0", "get"],
             "/pedido": ["1.0.0", "get", "post"],
-            "/producto": ["1.0.0", "get"],
             "/rappiTendero": ["1.0.0", "get"]
         }
     },
@@ -52,8 +52,7 @@ db.rol.insertMany([
         permisos:{
             "/catalogo": ["1.0.0", "get"],
             "/pedido": ["1.0.0", "get", "post"],
-            "/producto": ["1.0.0", "get"],
-            "/usuario": ["1.0.0", "get"]
+            "/usuario": ["1.0.0", "get", "put"]
         }
     }
 ]);
@@ -706,4 +705,83 @@ db.pedido.insertMany([
             { id_Producto: 25, cantidad: 3 }
         ]
     }
+]);
+
+db.createCollection("factura", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id','id_empresa', 'id_cliente', 'fecha', 'id_producto', 'cantidad', 'totalPago'],
+            properties: {
+                _id: {
+                    bsonType: 'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                id_cliente: {
+                    bsonType: "int",
+                    description: 'La id de cliente es obligatoria y debe ser numérica'
+                },
+                id_empresa:{ 
+                bsonType: "int",
+                description: 'La id de empresa es obligatoria y debe ser numérica'
+                },
+                fecha: {
+                    bsonType: 'date',
+                    description: 'El fecha debe ser obligatorio',
+                },
+                id_producto: {
+                    bsonType: 'int',
+                    description: 'El id de producto debe ser obligatorio',
+                },
+                cantidad: {
+                    bsonType: 'int',
+                    description: 'La cantidad debe ser obligatoria',
+                },
+                totalPago: {
+                    bsonType: 'int',
+                    description: 'La total a pagar debe ser numerico',
+                }
+            }
+        }
+    }
+});
+
+db.factura.insertMany([
+    {
+        id:Number(siguienteId("factura")),
+        id_cliente: 1,
+        id_empresa: 2,
+        fecha: ISODate("2023-08-28T12:00:00Z"),
+        id_producto:1 ,
+        cantidad: 1,
+        totalPago:25000
+    },
+    {
+        id:Number(siguienteId("factura")),
+        id_cliente: 1,
+        id_empresa: 2,
+        fecha: ISODate("2023-08-28T12:00:00Z"),
+        id_producto:2 ,
+        cantidad: 1,
+        totalPago:8500
+
+    },
+    {
+        id: Number(siguienteId("factura")),
+        id_cliente: 2,
+        id_empresa: 2,
+        fecha: ISODate("2023-08-28T12:00:00Z"),
+        id_producto:2,
+        cantidad: 3,
+        totalPago:25500
+
+    }
+
 ]);

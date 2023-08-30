@@ -7,8 +7,7 @@ db.counters.insertMany([
     { id: "productoId", sequence_value: 0 },
     { id: "pedidoId", sequence_value: 0 },
     { id: "rolId", sequence_value: 0 },
-    { id: "facturaId", sequence_value: 0 },
-
+    { id: "facturaId", sequence_value: 0 }
 ]);
 
 function siguienteId(coleccion) {
@@ -19,43 +18,41 @@ function siguienteId(coleccion) {
     );
     return sequenceDocument.sequence_value;
 }
-use("db_rappi")
+
 db.rol.insertMany([
     {
-        id: 1,
+        id: Number(siguienteId("rol")),
         rol: "admin",
         permisos:{
             "/*": ["*"]
         }
     },
     {
-        id: 2,
+        id: Number(siguienteId("rol")),
         rol: "empresa",
         permisos:{
             "/catalogo": ["1.0.0", "get"],
-            "/pedido": ["1.0.0", "get", "post",],
-            "/producto": ["1.0.0", "get", "post","put","delete"],
-            "/empresa": ["1.0.0", "get","put","delete"]
+            "/pedido": ["1.0.0", "get", "post"],
+            "/producto": ["1.0.0", "get", "post", "put", "delete"],
+            "/empresa": ["1.0.0", "get", "put"]
         }
     },
     {
-        id: 3,
+        id: Number(siguienteId("rol")),
         rol: "rappiTendero",
         permisos:{
-            "/catalogo": ["1.0.0", "get",],
+            "/catalogo": ["1.0.0", "get"],
             "/pedido": ["1.0.0", "get", "post"],
-            "/producto": ["1.0.0", "get"],
-            "/rappiTendero": ["1.0.0", "get","post"]
+            "/rappiTendero": ["1.0.0", "get"]
         }
     },
     {
-        id: 4,
+        id: Number(siguienteId("rol")),
         rol: "usuario",
         permisos:{
             "/catalogo": ["1.0.0", "get"],
-            "/pedido": ["1.0.0", "get", "post","put","delete"],
-            "/producto": ["1.0.0", "get",],
-            "/usuario": ["1.0.0", "get","post","put","delete"]
+            "/pedido": ["1.0.0", "get", "post"],
+            "/usuario": ["1.0.0", "get", "put"]
         }
     }
 ]);
@@ -115,6 +112,17 @@ db.createCollection("usuario", {
 });
 
 db.usuario.insertMany([
+    {
+        id: Number(siguienteId("usuario")),
+        nombre: 'adminHack',
+        apellido: "Hack",
+        email: 'hack69@hotmail.com',
+        departamento: "Amazonas2",
+        ciudad: "Peyecuesta",
+        direccion: "incognito",
+        telefono: 1000001,
+        rol: 1
+    },
     {
         id: Number(siguienteId("usuario")),
         nombre: 'Juan',
@@ -197,24 +205,57 @@ db.rappiTendero.insertMany([
     {
         id: Number(siguienteId("rappiTendero")),
         nombre: 'Marco',
-        apellido:"Rodriguez",
+        apellido: "Rodriguez",
         email: 'Marco@hotmail.com',
         departamento: "Santander",
         ciudad: "Bucaramanga",
-        direccion:"avenida 12",
-        telefono:30012345,
-        rol:3
+        direccion: "avenida 12",
+        telefono: 30012345,
+        rol: 3
     },
     {
         id: Number(siguienteId("rappiTendero")),
         nombre: 'Jhon',
-        apellido:"Ferrer",
+        apellido: "Ferrer",
         email: 'Jhon@hotmail.com',
         departamento: "Santander",
         ciudad: "Bucaramanga",
-        direccion:"avenida 10",
-        telefono:31023456,
-        rol:3
+        direccion: "avenida 10",
+        telefono: 31023456,
+        rol: 3
+    },
+    {
+        id: Number(siguienteId("rappiTendero")),
+        nombre: 'Nuevo',
+        apellido: "Tendero",
+        email: 'nuevo@hotmail.com',
+        departamento: "Antioquia",
+        ciudad: "Medellin",
+        direccion: "calle 50",
+        telefono: 32034567,
+        rol: 3
+    },
+    {
+        id: Number(siguienteId("rappiTendero")),
+        nombre: 'Ana',
+        apellido: "López",
+        email: 'ana@hotmail.com',
+        departamento: "Valle del Cauca",
+        ciudad: "Cali",
+        direccion: "carrera 15",
+        telefono: 33045678,
+        rol: 3
+    },
+    {
+        id: Number(siguienteId("rappiTendero")),
+        nombre: 'Carlos',
+        apellido: "Gómez",
+        email: 'carlos@hotmail.com',
+        departamento: "Cundinamarca",
+        ciudad: "Bogotá",
+        direccion: "carrera 7",
+        telefono: 34056789,
+        rol: 3
     },
 ]);
 
@@ -264,25 +305,49 @@ db.empresa.insertMany([
     {
         id: Number(siguienteId("empresa")),
         nombre: 'Burguer SS',
-        ciudad:"Bucaramanga",
+        ciudad: "Bucaramanga",
         direccion: 'carrera 4',
         telefono: 312009345,
-        rol:2
+        rol: 2
     },
     {
         id: Number(siguienteId("empresa")),
         nombre: 'Pizza zz',
-        ciudad:"Bucaramanga",
+        ciudad: "Bucaramanga",
         direccion: 'avenida 20 calle1',
         telefono: 312349345,
-        rol:2
-    }
+        rol: 2
+    },
+    {
+        id: Number(siguienteId("empresa")),
+        nombre: 'Tacos Deli',
+        ciudad: "Medellin",
+        direccion: 'calle 50',
+        telefono: 320456789,
+        rol: 2
+    },
+    {
+        id: Number(siguienteId("empresa")),
+        nombre: 'Sushi Master',
+        ciudad: "Cali",
+        direccion: 'carrera 15',
+        telefono: 330567890,
+        rol: 2
+    },
+    {
+        id: Number(siguienteId("empresa")),
+        nombre: 'Pasta Paradise',
+        ciudad: "Bogotá",
+        direccion: 'carrera 7',
+        telefono: 340678901,
+        rol: 2
+    },
 ]);
 
 db.createCollection("producto", {
     capped: true,
-    size: 5000,
-    max: 15,
+    size: 7000,
+    max: 50,
     validator: {
         $jsonSchema: {
             bsonType: 'object',
@@ -325,20 +390,203 @@ db.createCollection("producto", {
 db.producto.insertMany([
     {
         id: Number(siguienteId("producto")),
-        id_Empresa:1,
+        id_Empresa: 1,
         tipoProducto: 'Hamburguesa',
-        nombre:"Burguer de casa ",
+        nombre: 'Burguer de casa',
         descripcion: 'hamburguesa doble carne y salsa de casa',
         precio: 27000
-        
     },
     {
         id: Number(siguienteId("producto")),
-        id_Empresa:2,
-        tipoProducto: 'pizza',
-        nombre: 'Pizza especial',
-        descripcion: 'pizza con camarones y queso',
-        precio: 8500
+        id_Empresa: 1,
+        tipoProducto: 'Hamburguesa',
+        nombre: 'Burguer clásica',
+        descripcion: 'hamburguesa con queso y lechuga',
+        precio: 23000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 1,
+        tipoProducto: 'Bebida',
+        nombre: 'Refresco',
+        descripcion: 'bebida gaseosa de cola',
+        precio: 3000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 1,
+        tipoProducto: 'Postre',
+        nombre: 'Brownie',
+        descripcion: 'brownie de chocolate con helado',
+        precio: 7000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 1,
+        tipoProducto: 'Hamburguesa',
+        nombre: 'Burguer vegetariana',
+        descripcion: 'hamburguesa de vegetales y legumbres',
+        precio: 25000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 2,
+        tipoProducto: 'Pizza',
+        nombre: 'Pizza Hawaiana',
+        descripcion: 'pizza con jamón y piña',
+        precio: 9500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 2,
+        tipoProducto: 'Pizza',
+        nombre: 'Pizza de Carne',
+        descripcion: 'pizza con pepperoni y salchicha',
+        precio: 8800
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 2,
+        tipoProducto: 'Bebida',
+        nombre: 'Agua mineral',
+        descripcion: 'agua mineral sin gas',
+        precio: 1500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 2,
+        tipoProducto: 'Postre',
+        nombre: 'Tiramisú',
+        descripcion: 'postre italiano con café y mascarpone',
+        precio: 7500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 2,
+        tipoProducto: 'Pizza',
+        nombre: 'Pizza Vegana',
+        descripcion: 'pizza con ingredientes veganos',
+        precio: 9800
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 3,
+        tipoProducto: 'Tacos',
+        nombre: 'Tacos al Pastor',
+        descripcion: 'tacos de carne al pastor con cebolla y cilantro',
+        precio: 8000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 3,
+        tipoProducto: 'Tacos',
+        nombre: 'Tacos de Carnitas',
+        descripcion: 'tacos de carnitas con salsa picante',
+        precio: 7500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 3,
+        tipoProducto: 'Bebida',
+        nombre: 'Agua de Horchata',
+        descripcion: 'bebida de horchata refrescante',
+        precio: 2000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 3,
+        tipoProducto: 'Postre',
+        nombre: 'Churros',
+        descripcion: 'churros con azúcar y canela',
+        precio: 3500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 3,
+        tipoProducto: 'Tacos',
+        nombre: 'Tacos de Pollo',
+        descripcion: 'tacos de pollo con guacamole',
+        precio: 7000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 4,
+        tipoProducto: 'Sushi',
+        nombre: 'Sushi Mixto',
+        descripcion: 'variedad de sushi con pescado y vegetales',
+        precio: 15000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 4,
+        tipoProducto: 'Sushi',
+        nombre: 'Sushi Tempura',
+        descripcion: 'sushi frito con tempura',
+        precio: 12000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 4,
+        tipoProducto: 'Bebida',
+        nombre: 'Sake',
+        descripcion: 'bebida alcohólica de arroz',
+        precio: 5000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 4,
+        tipoProducto: 'Postre',
+        nombre: 'Helado de Té Verde',
+        descripcion: 'helado de té verde japonés',
+        precio: 4500
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 4,
+        tipoProducto: 'Sushi',
+        nombre: 'Sushi Vegetariano',
+        descripcion: 'sushi con ingredientes vegetarianos',
+        precio: 10000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 5,
+        tipoProducto: 'Pasta',
+        nombre: 'Pasta Carbonara',
+        descripcion: 'pasta con salsa carbonara y panceta',
+        precio: 12000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 5,
+        tipoProducto: 'Pasta',
+        nombre: 'Pasta Marinera',
+        descripcion: 'pasta con mariscos y salsa de tomate',
+        precio: 15000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 5,
+        tipoProducto: 'Bebida',
+        nombre: 'Vino Tinto',
+        descripcion: 'vino tinto de la casa',
+        precio: 8000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 5,
+        tipoProducto: 'Postre',
+        nombre: 'Tiramisú',
+        descripcion: 'postre italiano con café y mascarpone',
+        precio: 7000
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa: 5,
+        tipoProducto: 'Pasta',
+        nombre: 'Pasta Pesto',
+        descripcion: 'pasta con salsa pesto y nueces',
+        precio: 13000
     }
 ]);
 
@@ -400,61 +648,65 @@ db.createCollection("pedido", {
 
 db.pedido.insertMany([
     {
-        id: 1,
-        id_cliente: 101,
-        id_rappiTendero: 201,
+        id: Number(siguienteId("pedido")),
+        id_cliente: 2,
+        id_rappiTendero: 2,
         id_Empresa: 1,
         fecha: ISODate("2023-08-28T12:00:00Z"),
         productos: [
             { id_Producto: 1, cantidad: 2 },
-            { id_Producto: 2, cantidad: 1 }
+            { id_Producto: 2, cantidad: 1 },
+            { id_Producto: 4, cantidad: 3 },
+            { id_Producto: 5, cantidad: 2 }
         ]
     },
     {
-        id: 2,
-        id_cliente: 102,
-        id_rappiTendero: 202,
+        id: Number(siguienteId("pedido")),
+        id_cliente: 3,
+        id_rappiTendero: 5,
         id_Empresa: 2,
         fecha: ISODate("2023-08-29T14:30:00Z"),
         productos: [
-            { id_Producto: 1, cantidad: 3 },
-            { id_Producto: 2, cantidad: 2 }
+            { id_Producto: 7, cantidad: 3 },
+            { id_Producto: 8, cantidad: 2 },
+            { id_Producto: 10, cantidad: 1 }
         ]
     },
     {
-        id: 3,
-        id_cliente: 103,
-        id_rappiTendero: 203,
-        id_Empresa: 1,
+        id: Number(siguienteId("pedido")),
+        id_cliente: 2,
+        id_rappiTendero: 3,
+        id_Empresa: 3,
         fecha: ISODate("2023-08-30T18:15:00Z"),
         productos: [
-            { id_Producto: 2, cantidad: 1 }
+            { id_Producto: 12, cantidad: 1 }
         ]
     },
     {
-        id: 4,
-        id_cliente: 104,
-        id_rappiTendero: 204,
-        id_Empresa: 2,
+        id: Number(siguienteId("pedido")),
+        id_cliente: 3,
+        id_rappiTendero: 1,
+        id_Empresa: 4,
         fecha: ISODate("2023-08-31T20:45:00Z"),
         productos: [
-            { id_Producto: 1, cantidad: 1 },
-            { id_Producto: 2, cantidad: 1 }
+            { id_Producto: 17, cantidad: 1 },
+            { id_Producto: 20, cantidad: 1 }
         ]
     },
     {
-        id: 5,
-        id_cliente: 105,
-        id_rappiTendero: 205,
-        id_Empresa: 1,
+        id: Number(siguienteId("pedido")),
+        id_cliente: 2,
+        id_rappiTendero: 4,
+        id_Empresa: 5,
         fecha: ISODate("2023-09-01T10:30:00Z"),
         productos: [
-            { id_Producto: 1, cantidad: 2 }
+            { id_Producto: 21, cantidad: 2 },
+            { id_Producto: 24, cantidad: 1 },
+            { id_Producto: 25, cantidad: 3 }
         ]
     }
 ]);
 
-use("db_rappi")
 db.createCollection("factura", {
     capped: true,
     size: 5000,
@@ -503,7 +755,7 @@ db.createCollection("factura", {
 
 db.factura.insertMany([
     {
-        id:1,
+        id:Number(siguienteId("factura")),
         id_cliente: 1,
         id_empresa: 2,
         fecha: ISODate("2023-08-28T12:00:00Z"),
@@ -512,7 +764,7 @@ db.factura.insertMany([
         totalPago:25000
     },
     {
-        id:2,
+        id:Number(siguienteId("factura")),
         id_cliente: 1,
         id_empresa: 2,
         fecha: ISODate("2023-08-28T12:00:00Z"),
@@ -522,7 +774,7 @@ db.factura.insertMany([
 
     },
     {
-        id: 3,
+        id: Number(siguienteId("factura")),
         id_cliente: 2,
         id_empresa: 2,
         fecha: ISODate("2023-08-28T12:00:00Z"),
@@ -531,5 +783,5 @@ db.factura.insertMany([
         totalPago:25500
 
     }
-    
+
 ]);

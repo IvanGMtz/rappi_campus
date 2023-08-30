@@ -1,5 +1,5 @@
 import express from "express";
-import {getProductoV1, postProductoV1} from "../controllers/v1/producto.js"
+import {getProductoV1, postProductoV1, putProductoV1} from "../controllers/v1/producto.js"
 import routesVersioning  from 'express-routes-versioning';
 import {validarToken} from "../middlewares/JWT.js";
 
@@ -13,6 +13,10 @@ appProducto.get("/", version({
 
 appProducto.post("/", version({
     "^1.0.0": postProductoV1
+})); 
+
+appProducto.put("/", version({
+    "^1.0.0": putProductoV1
 })); 
 
 export default appProducto;

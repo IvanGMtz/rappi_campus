@@ -1,0 +1,453 @@
+use("db_rappi");
+db.createCollection("counters");
+db.counters.insertMany([
+    { id: "usuarioId", sequence_value: 0 },
+    { id: "rappiTenderoId", sequence_value: 0 },
+    { id: "empresaId", sequence_value: 0 },
+    { id: "productoId", sequence_value: 0 },
+    { id: "pedidoId", sequence_value: 0 },
+    { id: "rolId", sequence_value: 0 }
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+}
+
+db.rol.insertMany([
+    {
+        id: Number(siguienteId("rol")),
+        rol: "admin",
+        permisos:{
+            "/*": ["*"]
+        }
+    },
+    {
+        id: Number(siguienteId("rol")),
+        rol: "empresa",
+        permisos:{
+            "/catalogo": ["1.0.0", "get"],
+            "/pedido": ["1.0.0", "get", "post"],
+            "/producto": ["1.0.0", "get", "post"],
+            "/empresa": ["1.0.0", "get"]
+        }
+    },
+    {
+        id: Number(siguienteId("rol")),
+        rol: "rappiTendero",
+        permisos:{
+            "/catalogo": ["1.0.0", "get"],
+            "/pedido": ["1.0.0", "get", "post"],
+            "/producto": ["1.0.0", "get"],
+            "/rappiTendero": ["1.0.0", "get"]
+        }
+    },
+    {
+        id: Number(siguienteId("rol")),
+        rol: "usuario",
+        permisos:{
+            "/catalogo": ["1.0.0", "get"],
+            "/pedido": ["1.0.0", "get", "post"],
+            "/producto": ["1.0.0", "get"],
+            "/usuario": ["1.0.0", "get"]
+        }
+    }
+]);
+
+db.createCollection("usuario", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'apellido', 'email','departamento','ciudad','direccion','telefono', 'rol'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de usuario es obligatorio',
+                },
+                apellido: {
+                    bsonType: 'string',
+                    description: 'El apellido es obligatorio',
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio'
+                },
+                departamento: {
+                    bsonType: 'string',
+                    description: 'El departamento es obligatorio'
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio'
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'El direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono debe ser numerico'
+                },
+                rol: {
+                    bsonType: 'int',
+                    description: 'El rol debe ser numerico'
+                }
+            }
+        }
+    }
+});
+
+db.usuario.insertMany([
+    {
+        id: Number(siguienteId("usuario")),
+        nombre: 'Juan',
+        apellido:"Perez",
+        email: 'juan0@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 15",
+        telefono:31523456,
+        rol:4
+    },
+    {
+        id: Number(siguienteId("usuario")),
+        nombre: 'Pablo',
+        apellido:"Rodriguez",
+        email: 'Pablo@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 3",
+        telefono:31102936,
+        rol:4
+    },
+]);
+
+db.createCollection("rappiTendero", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'apellido', 'email','departamento','ciudad','direccion','telefono', 'rol'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de usuario es obligatorio',
+                },
+                apellido: {
+                    bsonType: 'string',
+                    description: 'El apellido es obligatorio',
+                },
+                email: {
+                    bsonType: 'string',
+                    description: 'El email es obligatorio'
+                },
+                departamento: {
+                    bsonType: 'string',
+                    description: 'El departamento es obligatorio'
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio'
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'El direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono debe ser numerico'
+                },
+                rol: {
+                    bsonType: 'int',
+                    description: 'El rol debe ser numerico'
+                }
+            }
+        }
+    }
+});
+
+db.rappiTendero.insertMany([
+    {
+        id: Number(siguienteId("rappiTendero")),
+        nombre: 'Marco',
+        apellido:"Rodriguez",
+        email: 'Marco@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 12",
+        telefono:30012345,
+        rol:3
+    },
+    {
+        id: Number(siguienteId("rappiTendero")),
+        nombre: 'Jhon',
+        apellido:"Ferrer",
+        email: 'Jhon@hotmail.com',
+        departamento: "Santander",
+        ciudad: "Bucaramanga",
+        direccion:"avenida 10",
+        telefono:31023456,
+        rol:3
+    },
+]);
+
+db.createCollection("empresa", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'nombre', 'ciudad', 'direccion','telefono', 'rol'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre de empresa es obligatorio',
+                },
+                ciudad: {
+                    bsonType: 'string',
+                    description: 'El ciudad es obligatorio',
+                },
+                direccion: {
+                    bsonType: 'string',
+                    description: 'la direccion es obligatorio'
+                },
+                telefono: {
+                    bsonType: 'int',
+                    description: 'El telefono es obligatorio'
+                },
+                rol: {
+                    bsonType: 'int',
+                    description: 'El rol debe ser numerico'
+                }
+            }
+        }
+    }
+});
+
+db.empresa.insertMany([
+    {
+        id: Number(siguienteId("empresa")),
+        nombre: 'Burguer SS',
+        ciudad:"Bucaramanga",
+        direccion: 'carrera 4',
+        telefono: 312009345,
+        rol:2
+    },
+    {
+        id: Number(siguienteId("empresa")),
+        nombre: 'Pizza zz',
+        ciudad:"Bucaramanga",
+        direccion: 'avenida 20 calle1',
+        telefono: 312349345,
+        rol:2
+    }
+]);
+
+db.createCollection("producto", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'id_Empresa','tipoProducto', 'nombre', 'descripcion','precio'],
+            properties: {
+                _id:{
+                    bsonType:'objectId'
+                },
+                id_Empresa:{
+                    bsonType: "int",
+                    description: 'La id de la empresa es obligatoria y debe ser numérica'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                tipoProducto: {
+                    bsonType: 'string',
+                    description: 'El tipo de producto es obligatorio',
+                },
+                nombre: {
+                    bsonType: 'string',
+                    description: 'El nombre es obligatorio',
+                },
+                descripcion: {
+                    bsonType: 'string',
+                    description: 'la descripcion es obligatorio'
+                },
+                precio: {
+                    bsonType: 'int',
+                    description: 'El precio es obligatorio'
+                }
+
+            }
+        }
+    }
+});
+
+db.producto.insertMany([
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa:1,
+        tipoProducto: 'Hamburguesa',
+        nombre:"Burguer de casa ",
+        descripcion: 'hamburguesa doble carne y salsa de casa',
+        precio: 27000
+        
+    },
+    {
+        id: Number(siguienteId("producto")),
+        id_Empresa:2,
+        tipoProducto: 'pizza',
+        nombre: 'Pizza especial',
+        descripcion: 'pizza con camarones y queso',
+        precio: 8500
+    }
+]);
+
+db.createCollection("pedido", {
+    capped: true,
+    size: 5000,
+    max: 15,
+    validator: {
+        $jsonSchema: {
+            bsonType: 'object',
+            additionalProperties: false,
+            required: ['id', 'id_cliente', 'id_rappiTendero', 'id_Empresa', 'fecha', 'productos'],
+            properties: {
+                _id: {
+                    bsonType: 'objectId'
+                },
+                id: {
+                    bsonType: "int",
+                    description: 'La id es obligatoria y debe ser numérica'
+                },
+                id_cliente: {
+                    bsonType: "int",
+                    description: 'La id de cliente es obligatoria y debe ser numérica'
+                },
+                id_rappiTendero: {
+                    bsonType: 'int',
+                    description: 'El id de rappiTendero debe ser obligatorio',
+                },
+                id_Empresa: {
+                    bsonType: 'int',
+                    description: 'El id debe ser obligatorio',
+                },
+                fecha: {
+                    bsonType: 'date',
+                    description: 'La fecha debe ser obligatoria',
+                },
+                productos: {
+                    bsonType: 'array',
+                    description: 'Arreglo de productos pedidos',
+                    items: {
+                        bsonType: 'object',
+                        required: ['id_Producto', 'cantidad'],
+                        properties: {
+                            id_Producto: {
+                                bsonType: 'int',
+                                description: 'La id del producto es obligatoria y debe ser numérica'
+                            },
+                            cantidad: {
+                                bsonType: 'int',
+                                description: 'La cantidad deseada del producto'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+});
+
+db.pedido.insertMany([
+    {
+        id: 1,
+        id_cliente: 101,
+        id_rappiTendero: 201,
+        id_Empresa: 1,
+        fecha: ISODate("2023-08-28T12:00:00Z"),
+        productos: [
+            { id_Producto: 1, cantidad: 2 },
+            { id_Producto: 2, cantidad: 1 }
+        ]
+    },
+    {
+        id: 2,
+        id_cliente: 102,
+        id_rappiTendero: 202,
+        id_Empresa: 2,
+        fecha: ISODate("2023-08-29T14:30:00Z"),
+        productos: [
+            { id_Producto: 1, cantidad: 3 },
+            { id_Producto: 2, cantidad: 2 }
+        ]
+    },
+    {
+        id: 3,
+        id_cliente: 103,
+        id_rappiTendero: 203,
+        id_Empresa: 1,
+        fecha: ISODate("2023-08-30T18:15:00Z"),
+        productos: [
+            { id_Producto: 2, cantidad: 1 }
+        ]
+    },
+    {
+        id: 4,
+        id_cliente: 104,
+        id_rappiTendero: 204,
+        id_Empresa: 2,
+        fecha: ISODate("2023-08-31T20:45:00Z"),
+        productos: [
+            { id_Producto: 1, cantidad: 1 },
+            { id_Producto: 2, cantidad: 1 }
+        ]
+    },
+    {
+        id: 5,
+        id_cliente: 105,
+        id_rappiTendero: 205,
+        id_Empresa: 1,
+        fecha: ISODate("2023-09-01T10:30:00Z"),
+        productos: [
+            { id_Producto: 1, cantidad: 2 }
+        ]
+    }
+]);

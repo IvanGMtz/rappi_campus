@@ -84,25 +84,24 @@ export const updaterappiTenderoV1 = async (req, res) => {
             return res.status(404).json({ message: "Producto not found" });
         }
 
-        res.status(200).json({ message: "Producto updated successfully" });
+        res.status(200).json({ message: "rappiTendero updated successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Error updating producto", error: error.message });
+        res.status(500).json({ message: "Error updating rappiTendero", error: error.message });
     }
 };
 
 export const deleterappiTenderoV1 = async (req, res) => {
-    const productoId = parseInt(req.params.id);
 
     try {
-        const result = await collection.deleteOne({ id: productoId });
+        const result = await collection.deleteOne({ id: req.body.id });
 
         if (result.deletedCount === 0) {
-            return res.status(404).json({ message: "Producto not found" });
+            return res.status(404).json({ message: "rappiTendero not found" });
         }
 
-        res.status(200).json({ message: "Producto deleted successfully" });
+        res.status(200).json({ message: "rappiTendero deleted successfully" });
     } catch (error) {
-        res.status(500).json({ message: "Error deleting producto", error: error.message });
+        res.status(500).json({ message: "Error deleting rappiTendero", error: error.message });
     }
 };
 

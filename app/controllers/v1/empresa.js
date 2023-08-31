@@ -50,3 +50,18 @@ export const updateEmpresaById = async (req, res) => {
         res.status(500).json({ message: "Error updating empresa", error: error.message });
     }
 };
+
+export const deleteEmpresaV1 = async (req, res) => {
+
+    try {
+        const result = await collection.deleteOne({ id: req.body.id });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: "empresa not found" });
+        }
+
+        res.status(200).json({ message: "empresa deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting empresa", error: error.message });
+    }
+};

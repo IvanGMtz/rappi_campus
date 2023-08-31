@@ -1,7 +1,7 @@
 import express from "express";
 import routesVersioning  from 'express-routes-versioning';
 import {validarToken} from "../middlewares/JWT.js";
-import { getEmpresaV1, updateEmpresaById } from "../controllers/v1/empresa.js";
+import { deleteEmpresaV1, getEmpresaV1, updateEmpresaById } from "../controllers/v1/empresa.js";
 import {postEmpresa, deleteEmpresaById} from "../controllers/v2/empresa.js";
 
 const version = routesVersioning();
@@ -14,6 +14,9 @@ appEmpresa.get("/", version({
 
 appEmpresa.put("/:id", version({
     "^1.0.0": updateEmpresaById
+})); 
+appEmpresa.delete("/:id", version({
+    "^1.0.0": deleteEmpresaV1
 })); 
 
 appEmpresa.post("/", version({

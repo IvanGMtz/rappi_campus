@@ -98,7 +98,6 @@ export const postFacturaV1 =async(req,res)=>{
             body('id_cliente').notEmpty().isInt().run(req),
             body('id_empresa').notEmpty().isInt().run(req),
             body('id_rappiTendero').notEmpty().isInt().run(req),
-            body('fecha').isDate().run(req),
             body('id_producto').isArray({}).run(req),
         
         ]);
@@ -107,15 +106,15 @@ export const postFacturaV1 =async(req,res)=>{
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log(req.body.id_producto);
 
         const nuevafactura = {
             id: await siguienteId("factura"),
             id_cliente: req.body.id_cliente,
             id_empresa: req.body.id_empresa,
             id_rappiTendero: req.body.id_rappiTendero,
-            fecha: req.body.fecha,
-            id_producto: req.body.id_producto,
-            
+            fecha: new Date(Date.now()),
+            id_producto: req.body.id_producto
         };
 
         const result = await collection.insertOne(nuevafactura);

@@ -6,14 +6,89 @@ let db = await con();
 let collection = db.collection("factura");
 
 export const getFacturaV1 = async (req, res) => {
-    if (req.data.payload.rol === 2) {
-        let result = await collection.find().toArray();
-        res.send(result);
-    } else {
-        let { id } = req.data.payload
-        let result = await collection.find({ id: Number(id) }).toArray();
-        res.send(result);  
-    }
+  let result = await collection.aggregate([
+        {
+            $lookup: {
+                from: "producto",
+                localField: "id_producto.id_Producto",
+                foreignField: "id",
+                as: "productos"
+            }
+        },
+        {
+            $lookup: {
+                from: "empresa",
+                localField: "id_empresa",
+                foreignField: "id",
+                as: "empresa"
+            }
+        },
+        {
+            $lookup: {
+                from: "usuario",
+                localField: "id_cliente",
+                foreignField: "id",
+                as: "cliente"
+            }
+        },
+        {
+            $lookup: {
+                from: "rappiTendero",
+                localField: "id_rappiTendero",
+                foreignField: "id",
+                as: "rappiTendero"
+            }
+        },
+        {
+            $unwind: "$productos"
+        },
+        {
+            $unwind: "$empresa"
+        },
+        {
+            $unwind: "$cliente"
+        },
+        {
+            $unwind: "$rappiTendero"
+        },
+        {
+            $project: {
+                _id: 0,
+                "Factura ID": "$id",
+                "Fecha de Factura": "$fecha",
+                "Cliente": {
+                    "Nombre": "$cliente.nombre",
+                    "Apellido": "$cliente.apellido",
+                    "Email": "$cliente.email",
+                    "Departamento": "$cliente.departamento",
+                    "Ciudad": "$cliente.ciudad",
+                    "Dirección": "$cliente.direccion",
+                    "Teléfono": "$cliente.telefono"
+                },
+                "Empresa": {
+                    "Nombre": "$empresa.nombre",
+                    "Ciudad": "$empresa.ciudad",
+                    "Dirección": "$empresa.direccion",
+                    "Teléfono": "$empresa.telefono"
+                },
+                "RappiTendero": {
+                    "Nombre": "$rappiTendero.nombre"
+                    
+                },
+                "Productos": {
+                    "ID": "$productos.id",
+                    "Tipo de Producto": "$productos.tipoProducto",
+                    "Nombre del Producto": "$productos.nombre",
+                    "Descripción": "$productos.descripcion",
+                    "Precio": "$productos.precio"
+                },
+                "Total a Pagar": "$totalPago"
+            }
+        }
+    
+    
+  ]).toArray();
+  res.send(result)
 };
 
 

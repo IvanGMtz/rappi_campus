@@ -15,3 +15,5 @@ appFactura.get("/", version({
 appFactura.post("/", version({
     "^1.0.0": postFacturaV1
 })); 
+
+export default appFactura

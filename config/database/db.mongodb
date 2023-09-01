@@ -34,7 +34,8 @@ db.rol.insertMany([
             "/catalogo": ["1.0.0", "get"],
             "/pedido": ["1.0.0", "get", "post"],
             "/producto": ["1.0.0", "get", "post", "put", "delete"],
-            "/empresa": ["1.0.0", "get", "put"]
+            "/empresa": ["1.0.0", "get", "put"],
+            "/factura": ["1.0.0","get","post"]
         }
     },
     {
@@ -300,7 +301,6 @@ db.createCollection("empresa", {
         }
     }
 });
-
 db.empresa.insertMany([
     {
         id: Number(siguienteId("empresa")),
@@ -598,7 +598,7 @@ db.createCollection("pedido", {
         $jsonSchema: {
             bsonType: 'object',
             additionalProperties: false,
-            required: ['id', 'id_cliente', 'id_rappiTendero', 'id_Empresa', 'fecha', 'productos'],
+            required: ['id', 'id_cliente', 'id_Empresa', 'fecha', 'productos'],
             properties: {
                 _id: {
                     bsonType: 'objectId'
@@ -611,10 +611,7 @@ db.createCollection("pedido", {
                     bsonType: "int",
                     description: 'La id de cliente es obligatoria y debe ser numérica'
                 },
-                id_rappiTendero: {
-                    bsonType: 'int',
-                    description: 'El id de rappiTendero debe ser obligatorio',
-                },
+              
                 id_Empresa: {
                     bsonType: 'int',
                     description: 'El id debe ser obligatorio',
@@ -650,7 +647,6 @@ db.pedido.insertMany([
     {
         id: Number(siguienteId("pedido")),
         id_cliente: 2,
-        id_rappiTendero: 2,
         id_Empresa: 1,
         fecha: ISODate("2023-08-28T12:00:00Z"),
         productos: [
@@ -663,7 +659,6 @@ db.pedido.insertMany([
     {
         id: Number(siguienteId("pedido")),
         id_cliente: 3,
-        id_rappiTendero: 5,
         id_Empresa: 2,
         fecha: ISODate("2023-08-29T14:30:00Z"),
         productos: [
@@ -675,7 +670,6 @@ db.pedido.insertMany([
     {
         id: Number(siguienteId("pedido")),
         id_cliente: 2,
-        id_rappiTendero: 3,
         id_Empresa: 3,
         fecha: ISODate("2023-08-30T18:15:00Z"),
         productos: [
@@ -685,7 +679,6 @@ db.pedido.insertMany([
     {
         id: Number(siguienteId("pedido")),
         id_cliente: 3,
-        id_rappiTendero: 1,
         id_Empresa: 4,
         fecha: ISODate("2023-08-31T20:45:00Z"),
         productos: [
@@ -696,7 +689,6 @@ db.pedido.insertMany([
     {
         id: Number(siguienteId("pedido")),
         id_cliente: 2,
-        id_rappiTendero: 4,
         id_Empresa: 5,
         fecha: ISODate("2023-09-01T10:30:00Z"),
         productos: [
@@ -706,7 +698,6 @@ db.pedido.insertMany([
         ]
     }
 ]);
-
 db.createCollection("factura", {
     capped: true,
     size: 5000,
@@ -715,7 +706,7 @@ db.createCollection("factura", {
         $jsonSchema: {
             bsonType: 'object',
             additionalProperties: false,
-            required: ['id','id_empresa', 'id_cliente', 'fecha', 'id_producto', 'cantidad', 'totalPago'],
+            required: ['id','id_empresa', 'id_cliente','id_rappiTendero', 'fecha', 'id_producto', 'totalPago'],
             properties: {
                 _id: {
                     bsonType: 'objectId'
@@ -732,17 +723,31 @@ db.createCollection("factura", {
                 bsonType: "int",
                 description: 'La id de empresa es obligatoria y debe ser numérica'
                 },
+                id_rappiTendero:{ 
+                    bsonType: "int",
+                description: 'La id de rappiTendero es obligatoria y debe ser numérica'
+                },
                 fecha: {
                     bsonType: 'date',
                     description: 'El fecha debe ser obligatorio',
                 },
                 id_producto: {
-                    bsonType: 'int',
-                    description: 'El id de producto debe ser obligatorio',
-                },
-                cantidad: {
-                    bsonType: 'int',
-                    description: 'La cantidad debe ser obligatoria',
+                    bsonType: 'array',
+                    description: 'Arreglo de productos pedidos',
+                    items: {
+                        bsonType: 'object',
+                        required: ['id_Producto', 'cantidad'],
+                        properties: {
+                            id_Producto: {
+                                bsonType: 'int',
+                                description: 'La id del producto es obligatoria y debe ser numérica'
+                            },
+                            cantidad: {
+                                bsonType: 'int',
+                                description: 'La cantidad deseada del producto'
+                            }
+                        }
+                    }
                 },
                 totalPago: {
                     bsonType: 'int',
@@ -755,31 +760,42 @@ db.createCollection("factura", {
 
 db.factura.insertMany([
     {
-        id:Number(siguienteId("factura")),
+        id: Number(siguienteId("usuario")),
         id_cliente: 1,
         id_empresa: 2,
-        fecha: ISODate("2023-08-28T12:00:00Z"),
-        id_producto:1 ,
-        cantidad: 1,
+        id_rappiTendero:2,
+        fecha:ISODate("2023-08-28T12:00:00Z"),
+        id_producto:[
+            { id_Producto: 1, cantidad: 2 },
+            { id_Producto: 2, cantidad: 1 },
+            { id_Producto: 4, cantidad: 3 },
+            { id_Producto: 5, cantidad: 2 }
+        ],
         totalPago:25000
     },
     {
-        id:Number(siguienteId("factura")),
+        id: Number(siguienteId("usuario")),
         id_cliente: 1,
         id_empresa: 2,
+        id_rappiTendero:3,
         fecha: ISODate("2023-08-28T12:00:00Z"),
-        id_producto:2 ,
-        cantidad: 1,
+        id_producto:[
+            { id_Producto: 7, cantidad: 3 },
+            { id_Producto: 8, cantidad: 2 },
+            { id_Producto: 10, cantidad: 1 }
+        ],
         totalPago:8500
 
     },
     {
-        id: Number(siguienteId("factura")),
+        id: Number(siguienteId("usuario")),
         id_cliente: 2,
         id_empresa: 2,
+        id_rappiTendero:1,
         fecha: ISODate("2023-08-28T12:00:00Z"),
-        id_producto:2,
-        cantidad: 3,
+        id_producto:[
+            { id_Producto: 12, cantidad: 1 }
+        ],
         totalPago:25500
 
     }

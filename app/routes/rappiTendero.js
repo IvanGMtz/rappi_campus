@@ -5,7 +5,7 @@ import { deleterappiTenderoV1, getRappiTenderoV1, postRappiTenderoV1, updaterapp
 
 const version = routesVersioning();
 const apprappiTendero = express.Router();
-// apprappiTendero.use(validarToken);
+ apprappiTendero.use(validarToken);
 
 apprappiTendero.get("/", version({
     "^1.0.0": getRappiTenderoV1

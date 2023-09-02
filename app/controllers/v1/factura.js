@@ -106,7 +106,6 @@ export const postFacturaV1 =async(req,res)=>{
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        console.log(req.body.id_producto);
 
         const nuevafactura = {
             id: await siguienteId("factura"),

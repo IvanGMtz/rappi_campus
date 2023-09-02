@@ -50,10 +50,12 @@ export const postProductoV1 = async (req, res) => {
 
 
 export const updateProductoV1 = async (req, res) => {
-    const productoId = parseInt(req.params.id);
+    const productoId = (req.body.id);
+    console.log(productoId);
 
     try {
         await Promise.all([
+            body('id_Empresa').notEmpty().run(req),
             body('tipoProducto').notEmpty().run(req),
             body('nombre').notEmpty().run(req),
             body('descripcion').notEmpty().run(req),
@@ -66,6 +68,7 @@ export const updateProductoV1 = async (req, res) => {
         }
 
         const productoActualizado = {
+            id_Empresa:req.body.id_Empresa,
             tipoProducto: req.body.tipoProducto,
             nombre: req.body.nombre,
             descripcion: req.body.descripcion,
@@ -73,8 +76,8 @@ export const updateProductoV1 = async (req, res) => {
         };
 
         const result = await collection.updateOne({ id: productoId }, { $set: productoActualizado });
-
-        if (result.modifiedCount === 0) {
+        console.log(result);
+        if (result.modifiedCount === 0 ) {
             return res.status(404).json({ message: "Producto not found" });
         }
 
@@ -85,8 +88,7 @@ export const updateProductoV1 = async (req, res) => {
 };
 
 export const deleteProductoV1 = async (req, res) => {
-    const productoId = parseInt(req.params.id);
-
+    const productoId = parseInt(req.body.id);
     try {
         const result = await collection.deleteOne({ id: productoId });
 

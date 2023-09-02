@@ -49,7 +49,6 @@ export const postPedidoV1 = async (req, res) => {
     let {id} = req.data.payload
     try {
         await Promise.all([
-            body('id_rappiTendero').notEmpty().isInt().run(req),
             body('id_Empresa').notEmpty().isInt().run(req),
             body('productos').isArray({}).run(req),
         ]);
@@ -62,7 +61,6 @@ export const postPedidoV1 = async (req, res) => {
         const nuevoPedido = {
             id: await siguienteId("pedido"),
             id_cliente: Number(id),
-            id_rappiTendero: req.body.id_rappiTendero,
             id_Empresa: req.body.id_Empresa,
             fecha: new Date(Date.now()),
             productos: req.body.productos,

@@ -6,6 +6,7 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
 
    El proyecto está desarrollado utilizando Node.js y MongoDB, por lo que necesitarás lo siguiente para ejecutarlo:
 
+
    - Node.js ([https://nodejs.org](https://nodejs.org/)) - Verifica que la versión instalada sea compatible con las dependencias del proyecto. Se recomienda la versión 18.16.0 de Node.js.
    - MongoDB Atlas (https://www.mongodb.com/cloud/atlas) - Se requiere una base de datos MongoDB en línea para almacenar la información del proyecto.
 
@@ -15,25 +16,23 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
 
    ```json
    MY_SERVER={"hostname":"127.10.10.15", "port":"3001"}
-   
+
    ATLAS_USER="tu_usuario_de_MongoDB_Atlas"
    ATLAS_PASSWORD="tu_contraseña_de_MongoDB_Atlas"
    ATLAS_DB="db_rappi"
-   
+
    # Clave privada para JWT
    JWT_PASSWORD="tu_contraseña_de_creación_del_token"
    ```
-
    Sí puede pedir las credenciales al autor sería lo ideal, en caso contrario modificar lo siguiente en la uri en el documento atlas.js dentro de las carpetas config/connection.
 
    ```tex
     const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
     @cluster0.jzmvywo.mongodb.net/${process.env.ATLAS_DB}`
-   
+
     const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
     @cluster0.<cambiar>.mongodb.net/${process.env.ATLAS_DB}`
    ```
-
    ## Instalación de Dependencias
 
    Ejecuta el siguiente comando en la terminal para instalar las dependencias necesarias:
@@ -41,7 +40,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    ```
    npm install
    ```
-
    ## Montar el Servidor
 
    Una vez configuradas las variables de entorno, puedes iniciar el servidor con el siguiente comando:
@@ -49,7 +47,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    ```
    npm run dev
    ```
-
    ## Generación del token
 
    Para interactuar con los endpoints, primero debes crear un token a partir del usuario y su rol.
@@ -61,6 +58,7 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    #### Rol: empresa
 
    - Acceso:
+
      - Endpoint: "/catalogo"
        - Versión: "1.0.0"
        - Métodos: "GET"
@@ -73,6 +71,9 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      - Endpoint: "/empresa"
        - Versión: "1.0.0"
        - Métodos: "GET", "PUT"
+     - Endpoint: "/factura"
+     - Versión: "1.0.0"
+     - Métodos: "GET", "POST"
 
    #### Rol: rappiTendero
 
@@ -103,15 +104,13 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    ```http
    GET http://127.10.10.15:3001/token?rol=<rol>
    ```
-
-   El rol administrador no genera token, se hace desde usuario 
+   El rol administrador no genera token, se hace desde usuario
 
    Ejemplos de datos a enviar:
 
    ```http
    GET http://127.10.10.15:3001/token?rol=usuario
    ```
-
    Por el body:
 
    ```json
@@ -119,7 +118,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        "nombre": "adminHack"
     }
    ```
-
    Usaremos el usuario admin para poder ingresar a todas las peticiones.
 
    Se generará el siguiente código que se debe agregar al HTTP Header de tipo Authorization:
@@ -127,7 +125,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    ```json
    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVlYzMyOTYxNDg1ZGY4MzZiYTJiNTgiLCJpZCI6IjEiLCJyb2wiOjEsImlhdCI6MTY5MzQxNDkzMiwiZXhwIjoxNjkzNDI1NzMyfQ.EMYHldjqe_WhozMBw72zgHwszAnEVdWIR9ld-P1hiH0
    ```
-
    ## Petición
 
    Para de interactuar con los endpoints puedes hacerlo mediante la siguiente petición GET:
@@ -135,7 +132,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    ```http
    GET http://127.10.10.15:3001/<nombre_endpoint>
    ```
-
    ## Endpoints Disponibles
 
    ### Listar catalogo v1.0.0
@@ -200,7 +196,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      },
        ...]
    ```
-
    ### Listar usuarios v1.0.0
 
    Endpoint: `GET /usuario `
@@ -235,7 +230,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      },
        ...]
    ```
-
    Desde el rol usuario, solo la información referente a ese usuario (Se debe generar el token desde el rol usuario primero, y usar un usuario que se encuentre en la base de datos ejemplo *Juan*). Ejemplos de Datos:
 
    ```json
@@ -254,7 +248,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      }
    ]
    ```
-
    ### Listar empresa v1.0.0
 
    Endpoint: `GET /empresa  `
@@ -283,7 +276,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      },
        ...]
    ```
-
    Desde el rol empresa , solo la información referente a esa empresa (Se debe generar el token desde el rol empresa primero, y usar un usuario que se encuentre en la base de datos ejemplo *Burguer SS*). Ejemplos de Datos:
 
    ```json
@@ -299,7 +291,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      }
    ]
    ```
-
    ### Listar rappiTendero v1.0.0
 
    Endpoint: `GET /rappiTendero  `
@@ -335,25 +326,19 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        ...]
    ```
 
-   ### Crear usuarios v1.0.0
+   ### Crear rappiTendero v1.0.0
 
-   Endpoint: `POST /usuario `
+   Endpoint: `POST /rappiTendero `
 
-   Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
+   Crea un nuevo rappiTendero en el sistema. Los datos de entrada deben incluir:
 
    - `nombre`
-
-   - `apellido` 
-
+   - `apellido`
    - `email`
-
    - `departamento`
-
    - `ciudad`
-
    - `direccion`
-
-   - `telefono` 
+   - `telefono`
 
      ```json
      {
@@ -366,7 +351,78 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        "telefono": 3001523
       }
      ```
+     Respuesta:
 
+     ```json
+     {
+       "message": "rappiTendero added successfully",
+       "insertedId": "64ef7a044b8a409050766adb"
+     }
+     ```
+    ### Editar rappiTendero v1.0.0
+
+   Endpoint: `PUT/rappiTendero`
+
+   Edita un rappiTendero en el sistema. Los datos de entrada deben incluir:
+
+   - `id` a través de la URL.
+   - `nombre`
+   - `apellido`
+   - `email`
+   - `departamento`
+   - `ciudad`
+   - `direccion`
+   - `telefono`
+
+     ```http
+     PUT http://127.10.10.15:3001/rappiTendero
+     ```
+     ```json
+     {
+       "id":1,
+       "nombre": "Laura",
+       "apellido": "Gonzalez",
+       "email": "LauR@campusland.com",
+       "departamento": "Santander",
+       "ciudad": "Bucaramanga",
+       "direccion": "Debajo del puente la 9na",
+       "telefono": 3001523
+      }
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "rappiTendero updated successfully"
+     }
+     ```
+
+
+   ### Crear usuarios v1.0.0
+
+   Endpoint: `POST /usuario `
+
+   Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
+
+   - `nombre`
+   - `apellido`
+   - `email`
+   - `departamento`
+   - `ciudad`
+   - `direccion`
+   - `telefono`
+
+     ```json
+     {
+       "nombre": "Laura",
+       "apellido": "Ramirez",
+       "email": "LauR@campusland.com",
+       "departamento": "Santander",
+       "ciudad": "Bucaramanga",
+       "direccion": "Puenta la 9na",
+       "telefono": 3001523
+      }
+     ```
      Respuesta:
 
      ```json
@@ -383,25 +439,17 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    Edita un usuario en el sistema. Los datos de entrada deben incluir:
 
    - `id` a través de la URL.
-
    - `nombre`
-
-   - `apellido` 
-
+   - `apellido`
    - `email`
-
    - `departamento`
-
    - `ciudad`
-
    - `direccion`
-
-   - `telefono` 
+   - `telefono`
 
      ```http
      PUT http://127.10.10.15:3001/usuario/4
      ```
-
      ```json
      {
        "nombre": "Laura",
@@ -413,7 +461,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        "telefono": 3001523
       }
      ```
-
      Respuesta:
 
      ```json
@@ -422,7 +469,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      }
      ```
 
-
    ### Editar empresa v1.0.0
 
    Endpoint: `PUT/empresa/id`
@@ -430,19 +476,14 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    Edita una empresa en el sistema. Los datos de entrada deben incluir:
 
    - `id` a través de la URL.
-
    - `nombre`
-
-   - `ciudad` 
-
+   - `ciudad`
    - `direccion`
-
    - `telefono`
 
      ```http
      PUT http://127.10.10.15:3001/empresa/1
      ```
-
      ```json
      {
          "nombre": "Burguer ZZ",
@@ -451,7 +492,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
          "telefono": 312009345
      }
      ```
-
      Respuesta:
 
      ```json
@@ -460,51 +500,144 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      }
      ```
 
+     ### Editar producto v1.0.0
+
+   Endpoint: `PUT/producto`
+
+   Edita una producto en el sistema. Los datos de entrada deben incluir:
+
+   - `id_Empresa` a través de la URL.
+   - `tipoProducto`
+   - `nombre`
+   - `descripcion`
+   - `precio`
+
+     ```http
+     PUT http://127.10.10.15:3001/producto
+     ```
+     ```json
+      {
+        "id":1,
+        "id_Empresa": 1,
+        "tipoProducto": "Hamburguesa",
+        "nombre": "Burguer de delki",
+        "descripcion": "hamburguesa doble carne y salsa de casa",
+        "precio": 26000
+      }
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "producto updated successfully"
+     }
+     ```
+
+
    ### Crear pedido v1.0.0
 
    Endpoint: `POST /pedido  `
 
-   Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
+   Crea una nuevo pedido en el sistema. Los datos de entrada deben incluir:
 
-   - `id_rappiTendero`
-
-   - `id_Empresa` 
-
+   - `id_Empresa`
    - `productos` array que contiene el `id_Producto` y su `cantidad`.
 
      ```json
      {
-       "id_rappiTendero": 2,
-       "id_Empresa": 1,
-       "fecha": {
-         "$date": "2023-08-28T12:00:00Z"
-       },
-       "productos": [
-         {
-           "id_Producto": 1,
-           "cantidad": 2
-         },
-         {
-           "id_Producto": 2,
-           "cantidad": 1
-         },
-         {
-           "id_Producto": 4,
-           "cantidad": 3
-         },
-         {
-           "id_Producto": 5,
-           "cantidad": 2
-         }
-       ]
-     }
+      "id_Empresa": 1,
+      "fecha": {
+        "$date": "2023-08-28T12:00:00Z"
+      },
+      "productos": [
+        {
+          "id_Producto": 1,
+          "cantidad": 2
+        },
+        {
+          "id_Producto": 2,
+          "cantidad": 1
+        },
+        {
+          "id_Producto": 4,
+          "cantidad": 3
+        },
+        {
+          "id_Producto": 5,
+          "cantidad": 2
+        }
+      ]
+      }
      ```
-
      Respuesta:
 
      ```json
      {
        "message": "Pedido added successfully",
+       "insertedId": "64ef83e64b8a409050766adc"
+     }
+     ```
+
+     ### Crear factura v1.0.0
+
+   Endpoint: `POST /factura  `
+
+   Crea una nueva factura en el sistema. Los datos de entrada deben incluir:
+
+   - `id_cliente`
+   - `id_empresa`
+   - `id_rappiTendero`
+   - `id_producto` array que contiene el `id_Producto` y su `cantidad`.
+
+     ```json
+     {
+        "id_cliente": 1,
+        "id_empresa": 2,
+        "id_rappiTendero":2,
+        "id_producto":[
+            { "id_Producto": 1, "cantidad": 2 },
+            { "id_Producto": 2, "cantidad": 1 },
+            { "id_Producto": 4, "cantidad": 3 },
+            { "id_Producto": 5, "cantidad": 2 }
+        ]
+     }
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "factura added successfully",
+       "insertedId": "64ef83e64b8a409050766adc"
+     }
+     ```
+
+   ### Crear Producto v1.0.0
+
+   Endpoint: `POST /producto  `
+
+   Crea una nueva producto en el sistema. Los datos de entrada deben incluir:
+
+   - `id_Empresa`
+   - `tipoProducto`
+   - `nombre`
+   - `descripcion`
+   - `precio` 
+
+     ```json
+     {
+    "id_Empresa": 1,
+    "tipoProducto": "Hamburguesa",
+    "nombre": "Burguer de casa",
+    "descripcion": "hamburguesa doble carne y salsa de casa",
+    "precio": 27000
+    }
+   
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "producto added successfully",
        "insertedId": "64ef83e64b8a409050766adc"
      }
      ```
@@ -584,6 +717,97 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        ...]
    ```
 
+   ### Listar productos v1.0.0
+
+   Endpoint: `GET /productos   `
+
+   Ejemplos de Datos:
+
+   ```json
+   [{
+    "_id": "64f21c61313f6874e1fd4b69",
+    "id": 1,
+    "id_Empresa": 1,
+    "tipoProducto": "Hamburguesa",
+    "nombre": "Burguer de casa",
+    "descripcion": "hamburguesa doble carne y salsa de casa",
+    "precio": 27000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6a",
+    "id": 2,
+    "id_Empresa": 1,
+    "tipoProducto": "Hamburguesa",
+    "nombre": "Burguer clásica",
+    "descripcion": "hamburguesa con queso y lechuga",
+    "precio": 23000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6b",
+    "id": 3,
+    "id_Empresa": 1,
+    "tipoProducto": "Bebida",
+    "nombre": "Refresco",
+    "descripcion": "bebida gaseosa de cola",
+    "precio": 3000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6c",
+    "id": 4,
+    "id_Empresa": 1,
+    "tipoProducto": "Postre",
+    "nombre": "Brownie",
+    "descripcion": "brownie de chocolate con helado",
+    "precio": 7000
+  },
+       ...]
+   ```
+
+      ### Listar factura v1.0.0
+
+   Endpoint: `GET /factura   `
+
+   Ejemplos de Datos:
+
+   ```json
+   [
+  {
+    "_id": "64f21c61313f6874e1fd4b69",
+    "id": 1,
+    "id_Empresa": 1,
+    "tipoProducto": "Hamburguesa",
+    "nombre": "Burguer de casa",
+    "descripcion": "hamburguesa doble carne y salsa de casa",
+    "precio": 27000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6a",
+    "id": 2,
+    "id_Empresa": 1,
+    "tipoProducto": "Hamburguesa",
+    "nombre": "Burguer clásica",
+    "descripcion": "hamburguesa con queso y lechuga",
+    "precio": 23000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6b",
+    "id": 3,
+    "id_Empresa": 1,
+    "tipoProducto": "Bebida",
+    "nombre": "Refresco",
+    "descripcion": "bebida gaseosa de cola",
+    "precio": 3000
+  },
+  {
+    "_id": "64f21c61313f6874e1fd4b6c",
+    "id": 4,
+    "id_Empresa": 1,
+    "tipoProducto": "Postre",
+    "nombre": "Brownie",
+    "descripcion": "brownie de chocolate con helado",
+    "precio": 7000
+  },...]
+   ```
    ### Eliminar usuario v2.0.1
 
    Endpoint: `DELETE/usuario/id`
@@ -595,7 +819,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      ```http
      DELETE http://127.10.10.15:3001/usuario/4
      ```
-
      Respuesta:
 
      ```json
@@ -604,7 +827,50 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      }
      ```
 
-   
+  ### Eliminar producto v2.0.1
+
+   Endpoint: `DELETE/producto`
+
+   Elimina un usuario del sistema. Los datos de entrada deben incluir:
+
+   - `id` en el body.
+    ```{   "id":1
+    }
+    ```
+
+     ```http
+     DELETE http://127.10.10.15:3001/producto
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "producto deleted successfully"
+     }
+     ```
+
+     ### Eliminar rappiTendero v2.0.1
+
+   Endpoint: `DELETE/rappiTendero`
+
+   Elimina un rappiTendero del sistema. Los datos de entrada deben incluir:
+
+   - `id` en el body.
+    ```{   "id":1
+    }
+    ```
+
+     ```http
+     DELETE http://127.10.10.15:3001/rappiTendero
+     ```
+     Respuesta:
+
+     ```json
+     {
+       "message": "rappiTendero deleted successfully"
+     }
+     ```
+
 
    ## Dependencias Utilizadas
 

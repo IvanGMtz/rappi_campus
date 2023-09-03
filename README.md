@@ -276,7 +276,7 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      },
        ...]
    ```
-   Desde el rol empresa , solo la información referente a esa empresa (Se debe generar el token desde el rol empresa primero, y usar un usuario que se encuentre en la base de datos ejemplo *Burguer SS*). Ejemplos de Datos:
+Desde el rol empresa , solo la información referente a esa empresa (Se debe generar el token desde el rol empresa primero, y usar un usuario que se encuentre en la base de datos ejemplo *Burguer SS*). Ejemplos de Datos:
 
    ```json
    [
@@ -359,13 +359,14 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        "insertedId": "64ef7a044b8a409050766adb"
      }
      ```
-    ### Editar rappiTendero v1.0.0
 
-   Endpoint: `PUT/rappiTendero`
+   ### Editar rappiTendero v1.0.0
+
+Endpoint: `PUT/rappiTendero`
 
    Edita un rappiTendero en el sistema. Los datos de entrada deben incluir:
 
-   - `id` a través de la URL.
+   - `id` 
    - `nombre`
    - `apellido`
    - `email`
@@ -506,7 +507,7 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
 
    Edita una producto en el sistema. Los datos de entrada deben incluir:
 
-   - `id_Empresa` a través de la URL.
+   - `id_Empresa` 
    - `tipoProducto`
    - `nombre`
    - `descripcion`
@@ -546,9 +547,6 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
      ```json
      {
       "id_Empresa": 1,
-      "fecha": {
-        "$date": "2023-08-28T12:00:00Z"
-      },
       "productos": [
         {
           "id_Producto": 1,
@@ -570,14 +568,14 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
       }
      ```
      Respuesta:
-
+     
      ```json
      {
        "message": "Pedido added successfully",
        "insertedId": "64ef83e64b8a409050766adc"
      }
      ```
-
+     
      ### Crear factura v1.0.0
 
    Endpoint: `POST /factura  `
@@ -618,29 +616,33 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    Crea una nueva producto en el sistema. Los datos de entrada deben incluir:
 
    - `id_Empresa`
+
    - `tipoProducto`
+
    - `nombre`
+
    - `descripcion`
+
    - `precio` 
 
      ```json
      {
-    "id_Empresa": 1,
-    "tipoProducto": "Hamburguesa",
-    "nombre": "Burguer de casa",
-    "descripcion": "hamburguesa doble carne y salsa de casa",
-    "precio": 27000
-    }
-   
-     ```
-     Respuesta:
-
-     ```json
-     {
-       "message": "producto added successfully",
-       "insertedId": "64ef83e64b8a409050766adc"
+         "id_Empresa": 1,
+         "tipoProducto": "Hamburguesa",
+         "nombre": "Burguer de casa",
+         "descripcion": "hamburguesa doble carne y salsa de casa",
+         "precio": 27000
      }
      ```
+     
+     Respuesta:
+
+```json
+ {
+   "message": "producto added successfully",
+   "insertedId": "64ef83e64b8a409050766adc"
+ }
+```
 
    ### Listar pedido v1.0.0
 
@@ -724,7 +726,8 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    Ejemplos de Datos:
 
    ```json
-   [{
+[
+  {
     "_id": "64f21c61313f6874e1fd4b69",
     "id": 1,
     "id_Empresa": 1,
@@ -763,14 +766,14 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
        ...]
    ```
 
-      ### Listar factura v1.0.0
+### Listar factura v1.0.0
 
-   Endpoint: `GET /factura   `
+Endpoint: `GET /factura   `
 
    Ejemplos de Datos:
 
    ```json
-   [
+[
   {
     "_id": "64f21c61313f6874e1fd4b69",
     "id": 1,
@@ -834,42 +837,46 @@ Este es un proyecto de backend para una empresa de delivery similar a Rappi. El 
    Elimina un usuario del sistema. Los datos de entrada deben incluir:
 
    - `id` en el body.
-    ```{   "id":1
-    }
-    ```
 
-     ```http
-     DELETE http://127.10.10.15:3001/producto
-     ```
-     Respuesta:
+```json
+{
+	"id":1
+}
+```
 
-     ```json
-     {
-       "message": "producto deleted successfully"
-     }
-     ```
+```http
+DELETE http://127.10.10.15:3001/producto
+```
 
-     ### Eliminar rappiTendero v2.0.1
+```json
+{
+   "message": "producto deleted successfully"
+}
+```
 
-   Endpoint: `DELETE/rappiTendero`
+  ### Eliminar rappiTendero v2.0.1
+
+Endpoint: `DELETE/rappiTendero`
 
    Elimina un rappiTendero del sistema. Los datos de entrada deben incluir:
 
    - `id` en el body.
-    ```{   "id":1
-    }
-    ```
 
-     ```http
-     DELETE http://127.10.10.15:3001/rappiTendero
-     ```
-     Respuesta:
+```json
+{
+	"id":1
+}
+```
 
-     ```json
-     {
-       "message": "rappiTendero deleted successfully"
-     }
-     ```
+```http
+DELETE http://127.10.10.15:3001/rappiTendero
+```
+
+```json
+ {
+   "message": "rappiTendero deleted successfully"
+ }
+```
 
 
    ## Dependencias Utilizadas

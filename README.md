@@ -1,474 +1,431 @@
 # Empresa de Delivery (Tipo Rappi)
 
-Este es un proyecto de backend para una empresa de delivery similar a Rappi. El objetivo es desarrollar un sistema que permita gestionar pedidos, productos, usuarios y otras funcionalidades esenciales para una plataforma de entrega de productos a domicilio. El proyecto se llevará a cabo utilizando MongoDB y Node.js como tecnologías principales.
+Este es un proyecto de backend para una empresa de delivery similar a Rappi. El objetivo es desarrollar un sistema que permita gestionar pedidos, productos, usuarios y otras funcionalidades esenciales para una plataforma de entrega de productos a domicilio. El proyecto se llevará a cabo utilizando MongoDB y Node.js como tecnologías principales, a continuación se muestra una imagen del diagrama de la base de datos.
 
-1. ## Requerimientos
+<img src="./img/DiagramaDB.png" alt="Database" style="zoom:50%;" />
 
-   El proyecto está desarrollado utilizando Node.js y MongoDB, por lo que necesitarás lo siguiente para ejecutarlo:
+**Nota:** mongoDB es una base de datos NoSQL se pudo trabajar todo en una tabla pero por facilidad de entendimiento del proyecto se hizo de ese modo, las consultas se hicieron de manera que las referencias coincidieran como en el diagrama.
 
+## Requerimientos
 
-   - Node.js ([https://nodejs.org](https://nodejs.org/)) - Verifica que la versión instalada sea compatible con las dependencias del proyecto. Se recomienda la versión 18.16.0 de Node.js.
-   - MongoDB Atlas (https://www.mongodb.com/cloud/atlas) - Se requiere una base de datos MongoDB en línea para almacenar la información del proyecto.
+El proyecto está desarrollado utilizando Node.js y MongoDB, por lo que necesitarás lo siguiente para ejecutarlo:
 
-   ## Configuración del archivo .env
+- Node.js ([https://nodejs.org](https://nodejs.org/)) - Verifica que la versión instalada sea compatible con las dependencias del proyecto. Se recomienda la versión 18.16.0 de Node.js.
+- MongoDB Atlas (https://www.mongodb.com/cloud/atlas) - Se requiere una base de datos MongoDB en línea para almacenar la información del proyecto.
 
-   Crea un archivo `.env` en la raíz del proyecto, configura las variables de entorno necesarias y la conexión a la base de datos. Un ejemplo de cómo configurar el archivo `.env` se proporciona en el archivo `.env.example`:
+## Configuración del archivo .env
 
-   ```json
-   MY_SERVER={"hostname":"127.10.10.15", "port":"3001"}
+Crea un archivo `.env` en la raíz del proyecto, configura las variables de entorno necesarias y la conexión a la base de datos. Un ejemplo de cómo configurar el archivo `.env` se proporciona en el archivo `.env.example`:
 
-   ATLAS_USER="tu_usuario_de_MongoDB_Atlas"
-   ATLAS_PASSWORD="tu_contraseña_de_MongoDB_Atlas"
-   ATLAS_DB="db_rappi"
+```json
+MY_SERVER={"hostname":"127.10.10.15", "port":"3001"}
 
-   # Clave privada para JWT
-   JWT_PASSWORD="tu_contraseña_de_creación_del_token"
-   ```
-   Sí puede pedir las credenciales al autor sería lo ideal, en caso contrario modificar lo siguiente en la uri en el documento atlas.js dentro de las carpetas config/connection.
+ATLAS_USER="tu_usuario_de_MongoDB_Atlas"
+ATLAS_PASSWORD="tu_contraseña_de_MongoDB_Atlas"
+ATLAS_DB="db_rappi"
 
-   ```tex
-    const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
-    @cluster0.jzmvywo.mongodb.net/${process.env.ATLAS_DB}`
+# Clave privada para JWT
+JWT_PASSWORD="tu_contraseña_de_creación_del_token"
+```
 
-    const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
-    @cluster0.<cambiar>.mongodb.net/${process.env.ATLAS_DB}`
-   ```
-   ## Instalación de Dependencias
+Sí puede pedir las credenciales al autor sería lo ideal, en caso contrario modificar lo siguiente en la uri en el documento atlas.js dentro de las carpetas config/connection.
 
-   Ejecuta el siguiente comando en la terminal para instalar las dependencias necesarias:
+```tex
+ const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
+ @cluster0.jzmvywo.mongodb.net/${process.env.ATLAS_DB}`
 
-   ```
-   npm install
-   ```
-   ## Montar el Servidor
+ const uri= `mongodb+srv://${process.env.ATLAS_USER}:${process.env.ATLAS_PASSWORD}
+ @cluster0.<cambiar>.mongodb.net/${process.env.ATLAS_DB}`
+```
 
-   Una vez configuradas las variables de entorno, puedes iniciar el servidor con el siguiente comando:
+## Instalación de Dependencias
 
-   ```
-   npm run dev
-   ```
-   ## Generación del token
+Ejecuta el siguiente comando en la terminal para instalar las dependencias necesarias:
 
-   Para interactuar con los endpoints, primero debes crear un token a partir del usuario y su rol.
+```
+npm install
+```
 
-   #### Rol: admin
+## Montar el Servidor
 
-   - Acceso: A todo.
+Una vez configuradas las variables de entorno, puedes iniciar el servidor con el siguiente comando:
 
-   #### Rol: empresa
+```
+npm run dev
+```
 
-   - Acceso:
+## Generación del token
 
-     - Endpoint: "/catalogo"
-       - Versión: "1.0.0"
-       - Métodos: "GET"
-     - Endpoint: "/pedido"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "POST"
-     - Endpoint: "/producto"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "POST", "PUT", "DELETE"
-     - Endpoint: "/empresa"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "PUT"
-     - Endpoint: "/factura"
-     - Versión: "1.0.0"
-     - Métodos: "GET", "POST"
+Para interactuar con los endpoints, primero debes crear un token a partir del usuario y su rol.
 
-   #### Rol: rappiTendero
+#### Rol: admin
 
-   - Acceso:
-     - Endpoint: "/catalogo"
-       - Versión: "1.0.0"
-       - Métodos: "GET"
-     - Endpoint: "/pedido"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "POST"
-     - Endpoint: "/rappiTendero"
-       - Versión: "1.0.0"
-       - Métodos: "GET"
+- Acceso: A todo.
 
-   #### Rol: usuario
+#### Rol: empresa
 
-   - Acceso:
-     - Endpoint: "/catalogo"
-       - Versión: "1.0.0"
-       - Métodos: "GET"
-     - Endpoint: "/pedido"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "POST"
-     - Endpoint: "/usuario"
-       - Versión: "1.0.0"
-       - Métodos: "GET", "PUT"
+- Acceso:
+  - Endpoint: "/catalogo"
+    - Versión: "1.0.0"
+    - Métodos: "GET"
+  - Endpoint: "/pedido"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "POST"
+  - Endpoint: "/producto"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "POST", "PUT", "DELETE"
+  - Endpoint: "/empresa"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "PUT"
 
-   ```http
-   GET http://127.10.10.15:3001/token?rol=<rol>
-   ```
-   El rol administrador no genera token, se hace desde usuario
+#### Rol: rappiTendero
 
-   Ejemplos de datos a enviar:
+- Acceso:
+  - Endpoint: "/catalogo"
+    - Versión: "1.0.0"
+    - Métodos: "GET"
+  - Endpoint: "/pedido"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "POST"
+  - Endpoint: "/rappiTendero"
+    - Versión: "1.0.0"
+    - Métodos: "GET"
 
-   ```http
-   GET http://127.10.10.15:3001/token?rol=usuario
-   ```
-   Por el body:
+#### Rol: usuario
 
-   ```json
-   {
-       "nombre": "adminHack"
-    }
-   ```
-   Usaremos el usuario admin para poder ingresar a todas las peticiones.
+- Acceso:
+  - Endpoint: "/catalogo"
+    - Versión: "1.0.0"
+    - Métodos: "GET"
+  - Endpoint: "/pedido"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "POST"
+  - Endpoint: "/usuario"
+    - Versión: "1.0.0"
+    - Métodos: "GET", "PUT"
 
-   Se generará el siguiente código que se debe agregar al HTTP Header de tipo Authorization:
+```http
+GET http://127.10.10.15:3001/token?rol=<rol>
+```
 
-   ```json
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVlYzMyOTYxNDg1ZGY4MzZiYTJiNTgiLCJpZCI6IjEiLCJyb2wiOjEsImlhdCI6MTY5MzQxNDkzMiwiZXhwIjoxNjkzNDI1NzMyfQ.EMYHldjqe_WhozMBw72zgHwszAnEVdWIR9ld-P1hiH0
-   ```
-   ## Petición
+El rol administrador no genera token, se hace desde usuario 
 
-   Para de interactuar con los endpoints puedes hacerlo mediante la siguiente petición GET:
+Ejemplos de datos a enviar:
 
-   ```http
-   GET http://127.10.10.15:3001/<nombre_endpoint>
-   ```
-   ## Endpoints Disponibles
+```http
+GET http://127.10.10.15:3001/token?rol=usuario
+```
 
-   ### Listar catalogo v1.0.0
+Por el body:
 
-   Endpoint: `GET /catalogo  `
+```json
+{
+    "nombre": "adminHack"
+ }
+```
 
-   Este endpoint te permite listar los productos asignados a una empresa en especifico registradas en el sistema desde cualquier rol. Ejemplos de Datos:
+Usaremos el usuario admin para poder ingresar a todas las peticiones.
 
-   ```json
-   [
-     {
-       "nombre": "Burguer SS",
-       "direccion": "carrera 4",
-       "productos": [
-         {
-           "nombre": "Burguer de casa",
-           "precio": 27000
-         },
-         {
-           "nombre": "Burguer clásica",
-           "precio": 23000
-         },
-         {
-           "nombre": "Refresco",
-           "precio": 3000
-         },
-         {
-           "nombre": "Brownie",
-           "precio": 7000
-         },
-         {
-           "nombre": "Burguer vegetariana",
-           "precio": 25000
-         }
-       ]
-     },
-     {
-       "nombre": "Pizza zz",
-       "direccion": "avenida 20 calle1",
-       "productos": [
-         {
-           "nombre": "Pizza Hawaiana",
-           "precio": 9500
-         },
-         {
-           "nombre": "Pizza de Carne",
-           "precio": 8800
-         },
-         {
-           "nombre": "Agua mineral",
-           "precio": 1500
-         },
-         {
-           "nombre": "Tiramisú",
-           "precio": 7500
-         },
-         {
-           "nombre": "Pizza Vegana",
-           "precio": 9800
-         }
-       ]
-     },
-       ...]
-   ```
-   ### Listar usuarios v1.0.0
+Se generará el siguiente código que se debe agregar al HTTP Header de tipo Authorization:
 
-   Endpoint: `GET /usuario `
+```json
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGVlYzMyOTYxNDg1ZGY4MzZiYTJiNTgiLCJpZCI6IjEiLCJyb2wiOjEsImlhdCI6MTY5MzQxNDkzMiwiZXhwIjoxNjkzNDI1NzMyfQ.EMYHldjqe_WhozMBw72zgHwszAnEVdWIR9ld-P1hiH0
+```
 
-   Este endpoint te permite listar todos los usuarios registradas en el sistema desde el rol admin. Ejemplos de Datos:
+## Petición
 
-   ```json
-   [
-     {
-       "_id": "64eec32961485df836ba2b58",
-       "id": 1,
-       "nombre": "adminHack",
-       "apellido": "Hack",
-       "email": "hack69@hotmail.com",
-       "departamento": "Amazonas2",
-       "ciudad": "Peyecuesta",
-       "direccion": "incognito",
-       "telefono": 1000001,
-       "rol": 1
-     },
-     {
-       "_id": "64eec32961485df836ba2b59",
-       "id": 2,
-       "nombre": "Juan",
-       "apellido": "Perez",
-       "email": "juan0@hotmail.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "avenida 15",
-       "telefono": 31523456,
-       "rol": 4
-     },
-       ...]
-   ```
-   Desde el rol usuario, solo la información referente a ese usuario (Se debe generar el token desde el rol usuario primero, y usar un usuario que se encuentre en la base de datos ejemplo *Juan*). Ejemplos de Datos:
+Para de interactuar con los endpoints puedes hacerlo mediante la siguiente petición GET:
 
-   ```json
-   [
-     {
-       "_id": "64eec32961485df836ba2b59",
-       "id": 2,
-       "nombre": "Juan",
-       "apellido": "Perez",
-       "email": "juan0@hotmail.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "avenida 15",
-       "telefono": 31523456,
-       "rol": 4
-     }
-   ]
-   ```
-   ### Listar empresa v1.0.0
+```http
+GET http://127.10.10.15:3001/<nombre_endpoint>
+```
 
-   Endpoint: `GET /empresa  `
+## Endpoints Disponibles
 
-   Este endpoint te permite listar todas los empresa registradas en el sistema desde el rol admin. Ejemplos de Datos:
+### Listar catalogo v1.0.0
 
-   ```json
-   [
-     {
-       "_id": "64eec32b61485df836ba2b60",
-       "id": 1,
-       "nombre": "Burguer SS",
-       "ciudad": "Bucaramanga",
-       "direccion": "carrera 4",
-       "telefono": 312009345,
-       "rol": 2
-     },
-     {
-       "_id": "64eec32b61485df836ba2b61",
-       "id": 2,
-       "nombre": "Pizza zz",
-       "ciudad": "Bucaramanga",
-       "direccion": "avenida 20 calle1",
-       "telefono": 312349345,
-       "rol": 2
-     },
-       ...]
-   ```
+Endpoint: `GET /catalogo  `
+
+Este endpoint te permite listar los productos asignados a una empresa en especifico registradas en el sistema desde cualquier rol. Ejemplos de Datos:
+
+```json
+[
+  {
+    "nombre": "Burguer SS",
+    "direccion": "carrera 4",
+    "productos": [
+      {
+        "nombre": "Burguer de casa",
+        "precio": 27000
+      },
+      {
+        "nombre": "Burguer clásica",
+        "precio": 23000
+      },
+      {
+        "nombre": "Refresco",
+        "precio": 3000
+      },
+      {
+        "nombre": "Brownie",
+        "precio": 7000
+      },
+      {
+        "nombre": "Burguer vegetariana",
+        "precio": 25000
+      }
+    ]
+  },
+  {
+    "nombre": "Pizza zz",
+    "direccion": "avenida 20 calle1",
+    "productos": [
+      {
+        "nombre": "Pizza Hawaiana",
+        "precio": 9500
+      },
+      {
+        "nombre": "Pizza de Carne",
+        "precio": 8800
+      },
+      {
+        "nombre": "Agua mineral",
+        "precio": 1500
+      },
+      {
+        "nombre": "Tiramisú",
+        "precio": 7500
+      },
+      {
+        "nombre": "Pizza Vegana",
+        "precio": 9800
+      }
+    ]
+  },
+    ...]
+```
+
+### Listar usuarios v1.0.0
+
+Endpoint: `GET /usuario `
+
+Este endpoint te permite listar todos los usuarios registradas en el sistema desde el rol admin. Ejemplos de Datos:
+
+```json
+[
+  {
+    "_id": "64eec32961485df836ba2b58",
+    "id": 1,
+    "nombre": "adminHack",
+    "apellido": "Hack",
+    "email": "hack69@hotmail.com",
+    "departamento": "Amazonas2",
+    "ciudad": "Peyecuesta",
+    "direccion": "incognito",
+    "telefono": 1000001,
+    "rol": 1
+  },
+  {
+    "_id": "64eec32961485df836ba2b59",
+    "id": 2,
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "email": "juan0@hotmail.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "avenida 15",
+    "telefono": 31523456,
+    "rol": 4
+  },
+    ...]
+```
+
+Desde el rol usuario, solo la información referente a ese usuario (Se debe generar el token desde el rol usuario primero, y usar un usuario que se encuentre en la base de datos ejemplo *Juan*). Ejemplos de Datos:
+
+```json
+[
+  {
+    "_id": "64eec32961485df836ba2b59",
+    "id": 2,
+    "nombre": "Juan",
+    "apellido": "Perez",
+    "email": "juan0@hotmail.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "avenida 15",
+    "telefono": 31523456,
+    "rol": 4
+  }
+]
+```
+
+### Listar empresa v1.0.0
+
+Endpoint: `GET /empresa  `
+
+Este endpoint te permite listar todas los empresa registradas en el sistema desde el rol admin. Ejemplos de Datos:
+
+```json
+[
+  {
+    "_id": "64eec32b61485df836ba2b60",
+    "id": 1,
+    "nombre": "Burguer SS",
+    "ciudad": "Bucaramanga",
+    "direccion": "carrera 4",
+    "telefono": 312009345,
+    "rol": 2
+  },
+  {
+    "_id": "64eec32b61485df836ba2b61",
+    "id": 2,
+    "nombre": "Pizza zz",
+    "ciudad": "Bucaramanga",
+    "direccion": "avenida 20 calle1",
+    "telefono": 312349345,
+    "rol": 2
+  },
+    ...]
+```
+
 Desde el rol empresa , solo la información referente a esa empresa (Se debe generar el token desde el rol empresa primero, y usar un usuario que se encuentre en la base de datos ejemplo *Burguer SS*). Ejemplos de Datos:
 
-   ```json
-   [
-     {
-       "_id": "64eec32b61485df836ba2b60",
-       "id": 1,
-       "nombre": "Burguer SS",
-       "ciudad": "Bucaramanga",
-       "direccion": "carrera 4",
-       "telefono": 312009345,
-       "rol": 2
-     }
-   ]
-   ```
-   ### Listar rappiTendero v1.0.0
+```json
+[
+  {
+    "_id": "64eec32b61485df836ba2b60",
+    "id": 1,
+    "nombre": "Burguer SS",
+    "ciudad": "Bucaramanga",
+    "direccion": "carrera 4",
+    "telefono": 312009345,
+    "rol": 2
+  }
+]
+```
 
-   Endpoint: `GET /rappiTendero  `
+### Listar rappiTendero v1.0.0
 
-   Este endpoint te permite listar todos los rappitenderos registradas en el sistema desde el rol admin. Ejemplos de Datos:
+Endpoint: `GET /rappiTendero  `
 
-   ```json
-   [
-     {
-       "_id": "64eec32a61485df836ba2b5b",
-       "id": 1,
-       "nombre": "Marco",
-       "apellido": "Rodriguez",
-       "email": "Marco@hotmail.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "avenida 12",
-       "telefono": 30012345,
-       "rol": 3
-     },
-     {
-       "_id": "64eec32a61485df836ba2b5c",
-       "id": 2,
-       "nombre": "Jhon",
-       "apellido": "Ferrer",
-       "email": "Jhon@hotmail.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "avenida 10",
-       "telefono": 31023456,
-       "rol": 3
-     },
-       ...]
-   ```
+Este endpoint te permite listar todos los rappitenderos registradas en el sistema desde el rol admin. Ejemplos de Datos:
 
-   ### Crear rappiTendero v1.0.0
+```json
+[
+  {
+    "_id": "64eec32a61485df836ba2b5b",
+    "id": 1,
+    "nombre": "Marco",
+    "apellido": "Rodriguez",
+    "email": "Marco@hotmail.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "avenida 12",
+    "telefono": 30012345,
+    "rol": 3
+  },
+  {
+    "_id": "64eec32a61485df836ba2b5c",
+    "id": 2,
+    "nombre": "Jhon",
+    "apellido": "Ferrer",
+    "email": "Jhon@hotmail.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "avenida 10",
+    "telefono": 31023456,
+    "rol": 3
+  },
+    ...]
+```
 
-   Endpoint: `POST /rappiTendero `
+### Crear usuarios v1.0.0
 
-   Crea un nuevo rappiTendero en el sistema. Los datos de entrada deben incluir:
+Endpoint: `POST /usuario `
 
-   - `nombre`
-   - `apellido`
-   - `email`
-   - `departamento`
-   - `ciudad`
-   - `direccion`
-   - `telefono`
+Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
 
-     ```json
-     {
-       "nombre": "Laura",
-       "apellido": "Ramirez",
-       "email": "LauR@campusland.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "Puenta la 9na",
-       "telefono": 3001523
-      }
-     ```
-     Respuesta:
+- `nombre`
 
-     ```json
-     {
-       "message": "rappiTendero added successfully",
-       "insertedId": "64ef7a044b8a409050766adb"
-     }
-     ```
+- `apellido` 
 
-   ### Editar rappiTendero v1.0.0
+- `email`
 
-Endpoint: `PUT/rappiTendero`
+- `departamento`
 
-   Edita un rappiTendero en el sistema. Los datos de entrada deben incluir:
+- `ciudad`
 
-   - `id` 
-   - `nombre`
-   - `apellido`
-   - `email`
-   - `departamento`
-   - `ciudad`
-   - `direccion`
-   - `telefono`
+- `direccion`
 
-     ```http
-     PUT http://127.10.10.15:3001/rappiTendero
-     ```
-     ```json
-     {
-       "id":1,
-       "nombre": "Laura",
-       "apellido": "Gonzalez",
-       "email": "LauR@campusland.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "Debajo del puente la 9na",
-       "telefono": 3001523
-      }
-     ```
-     Respuesta:
+- `telefono` 
 
-     ```json
-     {
-       "message": "rappiTendero updated successfully"
-     }
-     ```
+  ```json
+  {
+    "nombre": "Laura",
+    "apellido": "Ramirez",
+    "email": "LauR@campusland.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "Puenta la 9na",
+    "telefono": 3001523
+   }
+  ```
 
+  Respuesta:
 
-   ### Crear usuarios v1.0.0
+  ```json
+  {
+    "message": "Usuario added successfully",
+    "insertedId": "64ef7a044b8a409050766adb"
+  }
+  ```
 
-   Endpoint: `POST /usuario `
+### Editar usuarios v1.0.0
 
-   Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
+Endpoint: `PUT/usuario/id`
 
-   - `nombre`
-   - `apellido`
-   - `email`
-   - `departamento`
-   - `ciudad`
-   - `direccion`
-   - `telefono`
+Edita un usuario en el sistema. Los datos de entrada deben incluir:
 
-     ```json
-     {
-       "nombre": "Laura",
-       "apellido": "Ramirez",
-       "email": "LauR@campusland.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "Puenta la 9na",
-       "telefono": 3001523
-      }
-     ```
-     Respuesta:
+- `id` a través de la URL.
 
-     ```json
-     {
-       "message": "Usuario added successfully",
-       "insertedId": "64ef7a044b8a409050766adb"
-     }
-     ```
+- `nombre`
 
-   ### Editar usuarios v1.0.0
+- `apellido` 
 
-   Endpoint: `PUT/usuario/id`
+- `email`
 
-   Edita un usuario en el sistema. Los datos de entrada deben incluir:
+- `departamento`
 
-   - `id` a través de la URL.
-   - `nombre`
-   - `apellido`
-   - `email`
-   - `departamento`
-   - `ciudad`
-   - `direccion`
-   - `telefono`
+- `ciudad`
 
-     ```http
-     PUT http://127.10.10.15:3001/usuario/4
-     ```
-     ```json
-     {
-       "nombre": "Laura",
-       "apellido": "Ramirez",
-       "email": "LauR@campusland.com",
-       "departamento": "Santander",
-       "ciudad": "Bucaramanga",
-       "direccion": "Debajo del puente la 9na",
-       "telefono": 3001523
-      }
-     ```
-     Respuesta:
+- `direccion`
 
-     ```json
-     {
-       "message": "Usuario updated successfully"
-     }
-     ```
+- `telefono` 
+
+  ```http
+  PUT http://127.10.10.15:3001/usuario/4
+  ```
+
+  ```json
+  {
+    "nombre": "Laura",
+    "apellido": "Ramirez",
+    "email": "LauR@campusland.com",
+    "departamento": "Santander",
+    "ciudad": "Bucaramanga",
+    "direccion": "Debajo del puente la 9na",
+    "telefono": 3001523
+   }
+  ```
+
+  Respuesta:
+
+  ```json
+  {
+    "message": "Usuario updated successfully"
+  }
+  ```
+
 
    ### Editar empresa v1.0.0
 
@@ -477,14 +434,19 @@ Endpoint: `PUT/rappiTendero`
    Edita una empresa en el sistema. Los datos de entrada deben incluir:
 
    - `id` a través de la URL.
+
    - `nombre`
-   - `ciudad`
+
+   - `ciudad` 
+
    - `direccion`
+
    - `telefono`
 
      ```http
      PUT http://127.10.10.15:3001/empresa/1
      ```
+
      ```json
      {
          "nombre": "Burguer ZZ",
@@ -493,6 +455,7 @@ Endpoint: `PUT/rappiTendero`
          "telefono": 312009345
      }
      ```
+
      Respuesta:
 
      ```json
@@ -501,148 +464,54 @@ Endpoint: `PUT/rappiTendero`
      }
      ```
 
-     ### Editar producto v1.0.0
-
-   Endpoint: `PUT/producto`
-
-   Edita una producto en el sistema. Los datos de entrada deben incluir:
-
-   - `id_Empresa` 
-   - `tipoProducto`
-   - `nombre`
-   - `descripcion`
-   - `precio`
-
-     ```http
-     PUT http://127.10.10.15:3001/producto
-     ```
-     ```json
-      {
-        "id":1,
-        "id_Empresa": 1,
-        "tipoProducto": "Hamburguesa",
-        "nombre": "Burguer de delki",
-        "descripcion": "hamburguesa doble carne y salsa de casa",
-        "precio": 26000
-      }
-     ```
-     Respuesta:
-
-     ```json
-     {
-       "message": "producto updated successfully"
-     }
-     ```
-
-
    ### Crear pedido v1.0.0
 
    Endpoint: `POST /pedido  `
 
-   Crea una nuevo pedido en el sistema. Los datos de entrada deben incluir:
+   Crea una nuevo usuarios en el sistema. Los datos de entrada deben incluir:
 
-   - `id_Empresa`
+   - `id_rappiTendero`
+
+   - `id_Empresa` 
+
    - `productos` array que contiene el `id_Producto` y su `cantidad`.
 
      ```json
      {
-      "id_Empresa": 1,
-      "productos": [
-        {
-          "id_Producto": 1,
-          "cantidad": 2
-        },
-        {
-          "id_Producto": 2,
-          "cantidad": 1
-        },
-        {
-          "id_Producto": 4,
-          "cantidad": 3
-        },
-        {
-          "id_Producto": 5,
-          "cantidad": 2
-        }
-      ]
-      }
+       "id_rappiTendero": 2,
+       "id_Empresa": 1,
+       "fecha": {
+         "$date": "2023-08-28T12:00:00Z"
+       },
+       "productos": [
+         {
+           "id_Producto": 1,
+           "cantidad": 2
+         },
+         {
+           "id_Producto": 2,
+           "cantidad": 1
+         },
+         {
+           "id_Producto": 4,
+           "cantidad": 3
+         },
+         {
+           "id_Producto": 5,
+           "cantidad": 2
+         }
+       ]
+     }
      ```
+
      Respuesta:
-     
+
      ```json
      {
        "message": "Pedido added successfully",
        "insertedId": "64ef83e64b8a409050766adc"
      }
      ```
-     
-     ### Crear factura v1.0.0
-
-   Endpoint: `POST /factura  `
-
-   Crea una nueva factura en el sistema. Los datos de entrada deben incluir:
-
-   - `id_cliente`
-   - `id_empresa`
-   - `id_rappiTendero`
-   - `id_producto` array que contiene el `id_Producto` y su `cantidad`.
-
-     ```json
-     {
-        "id_cliente": 1,
-        "id_empresa": 2,
-        "id_rappiTendero":2,
-        "id_producto":[
-            { "id_Producto": 1, "cantidad": 2 },
-            { "id_Producto": 2, "cantidad": 1 },
-            { "id_Producto": 4, "cantidad": 3 },
-            { "id_Producto": 5, "cantidad": 2 }
-        ]
-     }
-     ```
-     Respuesta:
-
-     ```json
-     {
-       "message": "factura added successfully",
-       "insertedId": "64ef83e64b8a409050766adc"
-     }
-     ```
-
-   ### Crear Producto v1.0.0
-
-   Endpoint: `POST /producto  `
-
-   Crea una nueva producto en el sistema. Los datos de entrada deben incluir:
-
-   - `id_Empresa`
-
-   - `tipoProducto`
-
-   - `nombre`
-
-   - `descripcion`
-
-   - `precio` 
-
-     ```json
-     {
-         "id_Empresa": 1,
-         "tipoProducto": "Hamburguesa",
-         "nombre": "Burguer de casa",
-         "descripcion": "hamburguesa doble carne y salsa de casa",
-         "precio": 27000
-     }
-     ```
-     
-     Respuesta:
-
-```json
- {
-   "message": "producto added successfully",
-   "insertedId": "64ef83e64b8a409050766adc"
- }
-```
 
    ### Listar pedido v1.0.0
 
@@ -719,98 +588,6 @@ Endpoint: `PUT/rappiTendero`
        ...]
    ```
 
-   ### Listar productos v1.0.0
-
-   Endpoint: `GET /productos   `
-
-   Ejemplos de Datos:
-
-   ```json
-[
-  {
-    "_id": "64f21c61313f6874e1fd4b69",
-    "id": 1,
-    "id_Empresa": 1,
-    "tipoProducto": "Hamburguesa",
-    "nombre": "Burguer de casa",
-    "descripcion": "hamburguesa doble carne y salsa de casa",
-    "precio": 27000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6a",
-    "id": 2,
-    "id_Empresa": 1,
-    "tipoProducto": "Hamburguesa",
-    "nombre": "Burguer clásica",
-    "descripcion": "hamburguesa con queso y lechuga",
-    "precio": 23000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6b",
-    "id": 3,
-    "id_Empresa": 1,
-    "tipoProducto": "Bebida",
-    "nombre": "Refresco",
-    "descripcion": "bebida gaseosa de cola",
-    "precio": 3000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6c",
-    "id": 4,
-    "id_Empresa": 1,
-    "tipoProducto": "Postre",
-    "nombre": "Brownie",
-    "descripcion": "brownie de chocolate con helado",
-    "precio": 7000
-  },
-       ...]
-   ```
-
-### Listar factura v1.0.0
-
-Endpoint: `GET /factura   `
-
-   Ejemplos de Datos:
-
-   ```json
-[
-  {
-    "_id": "64f21c61313f6874e1fd4b69",
-    "id": 1,
-    "id_Empresa": 1,
-    "tipoProducto": "Hamburguesa",
-    "nombre": "Burguer de casa",
-    "descripcion": "hamburguesa doble carne y salsa de casa",
-    "precio": 27000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6a",
-    "id": 2,
-    "id_Empresa": 1,
-    "tipoProducto": "Hamburguesa",
-    "nombre": "Burguer clásica",
-    "descripcion": "hamburguesa con queso y lechuga",
-    "precio": 23000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6b",
-    "id": 3,
-    "id_Empresa": 1,
-    "tipoProducto": "Bebida",
-    "nombre": "Refresco",
-    "descripcion": "bebida gaseosa de cola",
-    "precio": 3000
-  },
-  {
-    "_id": "64f21c61313f6874e1fd4b6c",
-    "id": 4,
-    "id_Empresa": 1,
-    "tipoProducto": "Postre",
-    "nombre": "Brownie",
-    "descripcion": "brownie de chocolate con helado",
-    "precio": 7000
-  },...]
-   ```
    ### Eliminar usuario v2.0.1
 
    Endpoint: `DELETE/usuario/id`
@@ -822,6 +599,7 @@ Endpoint: `GET /factura   `
      ```http
      DELETE http://127.10.10.15:3001/usuario/4
      ```
+
      Respuesta:
 
      ```json
@@ -830,54 +608,7 @@ Endpoint: `GET /factura   `
      }
      ```
 
-  ### Eliminar producto v2.0.1
-
-   Endpoint: `DELETE/producto`
-
-   Elimina un usuario del sistema. Los datos de entrada deben incluir:
-
-   - `id` en el body.
-
-```json
-{
-	"id":1
-}
-```
-
-```http
-DELETE http://127.10.10.15:3001/producto
-```
-
-```json
-{
-   "message": "producto deleted successfully"
-}
-```
-
-  ### Eliminar rappiTendero v2.0.1
-
-Endpoint: `DELETE/rappiTendero`
-
-   Elimina un rappiTendero del sistema. Los datos de entrada deben incluir:
-
-   - `id` en el body.
-
-```json
-{
-	"id":1
-}
-```
-
-```http
-DELETE http://127.10.10.15:3001/rappiTendero
-```
-
-```json
- {
-   "message": "rappiTendero deleted successfully"
- }
-```
-
+   
 
    ## Dependencias Utilizadas
 
